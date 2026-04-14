@@ -1,5 +1,5 @@
 import { Flex, Text, ThemeIcon } from "@mantine/core";
-import { FireIcon } from "@/shared/icons";
+import { BankNotesIcon } from "@/shared/icons";
 
 export function Logo() {
 	return (
@@ -9,14 +9,10 @@ export function Logo() {
 				size="lg"
 				color="var(--mantine-primary-color-5)"
 			>
-				<FireIcon />
+				<BankNotesIcon />
 			</ThemeIcon>
 			<Text fw="bold" size="xl">
-				<span style={{ color: "var(--mantine-primary-color-5)" }}>Clean</span>{" "}
-				React{" "}
-				<span style={{ color: "var(--mantine-primary-color-5)" }}>
-					Template
-				</span>
+				Monexo
 			</Text>
 		</Flex>
 	);

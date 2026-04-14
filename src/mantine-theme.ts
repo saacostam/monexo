@@ -1,5 +1,5 @@
 export const theme = {
-	primaryColor: "indigo",
+	primaryColor: "green",
 	components: {
 		Modal: {
 			defaultProps: {
