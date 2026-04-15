@@ -12,7 +12,11 @@ export function Logo() {
 				<BankNotesIcon />
 			</ThemeIcon>
 			<Text fw="bold" size="xl">
-				Monexo
+				mo
+				<Text c="green" component="span" inherit>
+					ne
+				</Text>
+				xo
 			</Text>
 		</Flex>
 	);
