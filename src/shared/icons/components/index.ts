@@ -1,4 +1,5 @@
 export * from "./bank-notes.icon";
+export * from "./chart-bar.icon";
 export * from "./cube-transparent.icon";
 export * from "./exclamation-circle.icon";
 export * from "./fire.icon";
