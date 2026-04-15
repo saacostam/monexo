@@ -147,7 +147,7 @@ export default function HomeScreen() {
 					wrap="wrap"
 					gap="md"
 				>
-					<Flex direction="column" gap="md">
+					<Flex align="center" direction="column" gap="md">
 						<Flex align="center" direction="row" gap="xs" wrap="wrap">
 							<Button size="compact-sm">
 								<ArrowLeftIcon height="1rem" width="1rem" />
