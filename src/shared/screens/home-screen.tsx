@@ -83,12 +83,12 @@ const TIME_RANGES: {
 const Actions = () => (
 	<Flex direction="row" gap="xs">
 		<Tooltip label="Edit">
-			<ActionIcon variant="light" size="xs">
+			<ActionIcon variant="subtle" size="xs">
 				<PencilSquareIcon />
 			</ActionIcon>
 		</Tooltip>
 		<Tooltip label="Delete">
-			<ActionIcon color="red" variant="light" size="xs">
+			<ActionIcon color="red" variant="subtle" size="xs">
 				<TrashIcon />
 			</ActionIcon>
 		</Tooltip>
@@ -277,7 +277,7 @@ export default function HomeScreen() {
 								<Title size="h4">Monthly Budget</Title>
 							</Flex>
 							<Tooltip label="Edit Budget">
-								<ActionIcon variant="light" size="sm">
+								<ActionIcon variant="subtle" size="xs">
 									<PencilSquareIcon />
 								</ActionIcon>
 							</Tooltip>
