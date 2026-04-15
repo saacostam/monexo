@@ -12,6 +12,7 @@ import { type PropsWithChildren, useCallback, useMemo } from "react";
 import { Link } from "react-router";
 import { ThemeToggle } from "@/features/theme/ui";
 import { useAdapters } from "@/shared/adapters/core/app";
+import { IThemeVariant } from "@/shared/adapters/theme/domain";
 import { Logo } from "@/shared/components";
 import { genRoute, RouteName } from "@/shared/router/app";
 
@@ -21,7 +22,7 @@ const MAIN_LINKS: {
 }[] = [] as const;
 
 export function AppLayout({ children }: PropsWithChildren) {
-	const { sessionAdapter } = useAdapters();
+	const { sessionAdapter, themeAdapter } = useAdapters();
 
 	const [opened, { toggle }] = useDisclosure();
 
@@ -86,7 +87,9 @@ export function AppLayout({ children }: PropsWithChildren) {
 				))}
 			</AppShell.Navbar>
 
-			<AppShell.Main>
+			<AppShell.Main
+				bg={themeAdapter.theme === IThemeVariant.LIGHT ? "gray.1" : undefined}
+			>
 				<Container mx="auto">{children}</Container>
 			</AppShell.Main>
 		</AppShell>
