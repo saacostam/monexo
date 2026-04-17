@@ -1,6 +1,7 @@
 import { type PropsWithChildren, useMemo } from "react";
 import { useLoginClient } from "@/features/login/infra";
 import { useTodoClient } from "@/features/todo/infra";
+import { useAdapters } from "@/shared/adapters/core/app";
 import { ClientsContext } from "../app";
 import type { IClients } from "../domain";
 
@@ -15,7 +16,11 @@ import type { IClients } from "../domain";
  * @returns {JSX.Element} A context provider wrapping the children with available clients.
  */
 export function ClientsProvider({ children }: PropsWithChildren) {
-	const loginClient = useLoginClient();
+	const { fetcherAdapter } = useAdapters();
+
+	const loginClient = useLoginClient({
+		fetcher: fetcherAdapter,
+	});
 	const todoClient = useTodoClient();
 
 	const clients: IClients = useMemo(

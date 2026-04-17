@@ -23,7 +23,7 @@ export function MockLogin() {
 					<Text size="xl" fw="bold">
 						Login
 					</Text>
-					<Text size="sm">Lorem ipsum dolor sit amet!</Text>
+					<Text size="sm">💰 Track expenses. See where your money goes.</Text>
 				</Box>
 				<TextInput
 					size="sm"
