@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from "react";
-import { AuthGuard } from "@/features/auth/ui";
+import { AuthGuard } from "@/features/auth/core/ui";
 import { GlobalModalsProvider } from "@/shared/modals/ui";
 import { Router } from "@/shared/router/ui";
 

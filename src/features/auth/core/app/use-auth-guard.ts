@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router";
-import { PUBLIC_ROUTES } from "@/features/auth/domain";
+import { PUBLIC_ROUTES } from "@/features/auth/core/domain";
 import { useAdapters } from "@/shared/adapters/core/app";
 import { genRoute, RouteName } from "@/shared/router/app";
 
