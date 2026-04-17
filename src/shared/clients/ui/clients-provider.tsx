@@ -1,5 +1,5 @@
 import { type PropsWithChildren, useMemo } from "react";
-import { useLoginClient } from "@/features/login/infra";
+import { useLoginClient } from "@/features/auth/login/infra";
 import { useTodoClient } from "@/features/todo/infra";
 import { useAdapters } from "@/shared/adapters/core/app";
 import { ClientsContext } from "../app";

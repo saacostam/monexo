@@ -1,4 +1,4 @@
-import type { ILoginClient } from "@/features/login/domain";
+import type { ILoginClient } from "@/features/auth/login/domain";
 import type { ITodoClient } from "@/features/todo/domain";
 
 /**

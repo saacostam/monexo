@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import type { ILoginClient } from "@/features/login/domain";
+import type { ILoginClient } from "@/features/auth/login/domain";
 import type { IFetcherAdapter } from "@/shared/adapters/fetcher/domain";
 
 export interface UseLoginClientArgs {
