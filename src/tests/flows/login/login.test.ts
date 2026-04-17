@@ -1,5 +1,5 @@
 import { waitFor } from "@testing-library/dom";
-import type { IAuthClientPayload } from "@/features/auth/login/domain";
+import type { IAuthClientPayload } from "@/features/auth/core/domain";
 import { loginDriver } from "@/features/auth/login/test";
 import { genRoute, RouteName } from "@/shared/router/app";
 import { expectRoute, mockDi, renderAppRoot } from "@/tests/utils";

@@ -3,10 +3,10 @@ import { useCallback, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import z from "zod";
+import { useMutateLogin } from "@/features/auth/core/app";
 import { useAdapters } from "@/shared/adapters/core/app";
 import { genRoute, RouteName } from "@/shared/router/app";
 import { FormUtils } from "@/shared/utils/form";
-import { useMutateLogin } from "./use-mutate-login";
 
 const loginSchema = z.object({
 	username: z.string().min(1, { message: "Username is required" }).max(48),

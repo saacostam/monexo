@@ -1,4 +1,4 @@
-import type { IAuthClientPayload } from "@/features/auth/login/domain";
+import type { IAuthClientPayload } from "@/features/auth/core/domain";
 import { MutationKeys, useMetaMutation } from "@/shared/async-state";
 import { useClients } from "@/shared/clients/app";
 
