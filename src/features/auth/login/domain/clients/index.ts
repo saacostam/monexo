@@ -1,1 +1,1 @@
-export * from "./login-client.interface";
+export * from "./auth-client.interface";

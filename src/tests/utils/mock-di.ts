@@ -17,7 +17,7 @@ export function mockDi(overrides?: {
 			patchTodo: vi.fn(),
 			queryTodos: vi.fn(),
 		},
-		loginClient: {
+		authClient: {
 			login: vi.fn(),
 		},
 	} satisfies IClients;

@@ -1,12 +1,12 @@
-import type { ILoginClientPayload } from "@/features/auth/login/domain";
+import type { IAuthClientPayload } from "@/features/auth/login/domain";
 import { MutationKeys, useMetaMutation } from "@/shared/async-state";
 import { useClients } from "@/shared/clients/app";
 
 export function useMutateLogin() {
-	const { loginClient } = useClients();
+	const { authClient } = useClients();
 
 	return useMetaMutation({
 		mutationKey: [MutationKeys.LOGIN],
-		mutationFn: (req: ILoginClientPayload["LoginIn"]) => loginClient.login(req),
+		mutationFn: (req: IAuthClientPayload["LoginIn"]) => authClient.login(req),
 	});
 }

@@ -1,1 +1,1 @@
-export * from "./use-login-client";
+export * from "./use-auth-client";

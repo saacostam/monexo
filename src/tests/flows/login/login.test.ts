@@ -1,5 +1,5 @@
 import { waitFor } from "@testing-library/dom";
-import type { ILoginClientPayload } from "@/features/auth/login/domain";
+import type { IAuthClientPayload } from "@/features/auth/login/domain";
 import { loginDriver } from "@/features/auth/login/test";
 import { genRoute, RouteName } from "@/shared/router/app";
 import { expectRoute, mockDi, renderAppRoot } from "@/tests/utils";
@@ -28,10 +28,10 @@ describe("Login", () => {
 		const mockToken = "test-token";
 
 		// Login will succeed
-		const loginResponse: ILoginClientPayload["LoginOut"] = {
+		const loginResponse: IAuthClientPayload["LoginOut"] = {
 			token: mockToken,
 		};
-		di.clients.loginClient.login.mockResolvedValue(loginResponse);
+		di.clients.authClient.login.mockResolvedValue(loginResponse);
 
 		// Login container is visible
 		const container = await loginDriver.findLoginContainer();
@@ -54,11 +54,11 @@ describe("Login", () => {
 
 		// Expect re-direct
 		await waitFor(() => {
-			const loginRequest: ILoginClientPayload["LoginIn"] = {
+			const loginRequest: IAuthClientPayload["LoginIn"] = {
 				username: mockUsername,
 				password: mockPassword,
 			};
-			expect(di.clients.loginClient.login).toHaveBeenCalledExactlyOnceWith(
+			expect(di.clients.authClient.login).toHaveBeenCalledExactlyOnceWith(
 				loginRequest,
 			);
 		});

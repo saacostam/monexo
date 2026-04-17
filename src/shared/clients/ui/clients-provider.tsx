@@ -1,5 +1,5 @@
 import { type PropsWithChildren, useMemo } from "react";
-import { useLoginClient } from "@/features/auth/login/infra";
+import { useAuthClient } from "@/features/auth/login/infra";
 import { useTodoClient } from "@/features/todo/infra";
 import { useAdapters } from "@/shared/adapters/core/app";
 import { ClientsContext } from "../app";
@@ -18,17 +18,17 @@ import type { IClients } from "../domain";
 export function ClientsProvider({ children }: PropsWithChildren) {
 	const { fetcherAdapter } = useAdapters();
 
-	const loginClient = useLoginClient({
+	const authClient = useAuthClient({
 		fetcher: fetcherAdapter,
 	});
 	const todoClient = useTodoClient();
 
 	const clients: IClients = useMemo(
 		() => ({
-			loginClient,
+			authClient,
 			todoClient,
 		}),
-		[loginClient, todoClient],
+		[authClient, todoClient],
 	);
 
 	return (
