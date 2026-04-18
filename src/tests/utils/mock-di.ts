@@ -11,15 +11,18 @@ export function mockDi(overrides?: {
 	};
 }) {
 	const clients = {
+		authClient: {
+			login: vi.fn(),
+			signup: vi.fn(),
+		},
 		todoClient: {
 			createTodo: vi.fn(),
 			deleteTodo: vi.fn(),
 			patchTodo: vi.fn(),
 			queryTodos: vi.fn(),
 		},
-		authClient: {
-			login: vi.fn(),
-			signup: vi.fn(),
+		user: {
+			getUser: vi.fn(),
 		},
 	} satisfies IClients;
 
