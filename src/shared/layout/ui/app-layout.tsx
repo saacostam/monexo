@@ -1,16 +1,16 @@
 import {
 	AppShell,
 	Burger,
-	Button,
 	Container,
 	Flex,
 	Group,
 	UnstyledButton,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { type PropsWithChildren, useCallback, useMemo } from "react";
+import { type PropsWithChildren, useMemo } from "react";
 import { Link } from "react-router";
 import { ThemeToggle } from "@/features/theme/ui";
+import { UserMenu } from "@/features/user/menu/ui";
 import { useAdapters } from "@/shared/adapters/core/app";
 import { IThemeVariant } from "@/shared/adapters/theme/domain";
 import { Logo } from "@/shared/components";
@@ -22,7 +22,7 @@ const MAIN_LINKS: {
 }[] = [] as const;
 
 export function AppLayout({ children }: PropsWithChildren) {
-	const { sessionAdapter, themeAdapter } = useAdapters();
+	const { themeAdapter } = useAdapters();
 
 	const [opened, { toggle }] = useDisclosure();
 
@@ -35,11 +35,6 @@ export function AppLayout({ children }: PropsWithChildren) {
 				label,
 			})),
 		[],
-	);
-
-	const onClickLogout = useCallback(
-		() => sessionAdapter.removeToken(),
-		[sessionAdapter.removeToken],
 	);
 
 	return (
@@ -72,8 +67,8 @@ export function AppLayout({ children }: PropsWithChildren) {
 									</UnstyledButton>
 								))}
 							</Group>
-							<Button onClick={onClickLogout}>Logout</Button>
 							<ThemeToggle />
+							<UserMenu />
 						</Flex>
 					</Group>
 				</Group>

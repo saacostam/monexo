@@ -1,5 +1,9 @@
 export enum QueryKeys {
+	// TODO
 	QUERY_TODOS = "Query Todos",
+
+	// USER
+	USER = "User",
 }
 
 export enum MutationKeys {
