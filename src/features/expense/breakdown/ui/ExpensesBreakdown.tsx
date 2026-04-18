@@ -1,0 +1,105 @@
+import { PieChart } from "@mantine/charts";
+import {
+	ActionIcon,
+	Button,
+	Card,
+	Divider,
+	Flex,
+	Indicator,
+	Progress,
+	Text,
+	ThemeIcon,
+	Title,
+	Tooltip,
+} from "@mantine/core";
+import {
+	ArrowRightIcon,
+	BankNotesIcon,
+	ChartBarIcon,
+	PencilSquareIcon,
+} from "@/shared/icons";
+
+const CHART_DATA = [
+	{ name: "House" as const, value: 400, color: "indigo.6" },
+	{ name: "Fun" as const, value: 300, color: "yellow.6" },
+	{ name: "Food" as const, value: 300, color: "green.6" },
+];
+
+export function ExpensesBreakdown() {
+	return (
+		<Card h="100%" withBorder>
+			<Flex align="center" direction="row" gap="xs" wrap="wrap">
+				<ThemeIcon bdrs="100%" p="0.25rem">
+					<ChartBarIcon />
+				</ThemeIcon>
+				<Title size="h4">Spending Breakdown</Title>
+			</Flex>
+			<Divider my="sm" />
+			<Flex justify="center">
+				<PieChart
+					data={CHART_DATA}
+					labelsPosition="outside"
+					labelsType="percent"
+					withLabels
+					withLabelsLine
+					withTooltip
+				/>
+			</Flex>
+			<Flex direction="column" gap="0.5rem" wrap="wrap">
+				{CHART_DATA.map(({ color, name, value }, i) => (
+					<Flex align="center" gap="xs" key={+i}>
+						<Indicator color={color} />
+						<Text size="xs">
+							<Text component="span" fw="bold" size="xs">
+								{name}
+							</Text>
+							{" • "}${value}
+						</Text>
+					</Flex>
+				))}
+			</Flex>
+			<Divider my="md" />
+			<Flex
+				direction="row"
+				gap="xs"
+				justify="space-between"
+				mb="sm"
+				wrap="wrap"
+			>
+				<Flex align="center" direction="row" gap="xs" wrap="wrap">
+					<ThemeIcon bdrs="100%" p="0.25rem">
+						<BankNotesIcon />
+					</ThemeIcon>
+					<Title size="h4">Monthly Budget</Title>
+				</Flex>
+				<Tooltip label="Edit Budget">
+					<ActionIcon variant="subtle" size="xs">
+						<PencilSquareIcon />
+					</ActionIcon>
+				</Tooltip>
+			</Flex>
+			<Progress mb="xs" size="1.5rem" striped value={45} />
+			<Flex direction="row" justify="space-between">
+				<Text size="sm">
+					Spent:{" "}
+					<Text component="span" inherit fw="bold">
+						$14
+					</Text>
+				</Text>
+				<Text size="sm">
+					Remaining:{" "}
+					<Text component="span" inherit fw="bold">
+						$28
+					</Text>
+				</Text>
+			</Flex>
+			<Divider my="md" />
+			<Button
+				rightSection={<ArrowRightIcon height="1.2rem" width="1.2rem" />}
+				size="md"
+			>
+				More Analytics
+			</Button>
+		</Card>
+	);
+}
