@@ -19,6 +19,7 @@ export function mockDi(overrides?: {
 		},
 		authClient: {
 			login: vi.fn(),
+			signup: vi.fn(),
 		},
 	} satisfies IClients;
 

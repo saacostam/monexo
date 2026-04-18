@@ -1,38 +1,46 @@
+import type { ZodType, z } from "zod";
+
 export interface IFetcherAdapter {
-	get<TResponse>(
+	get<T extends ZodType>(
 		url: string,
+		schema: T,
 		config?: IFetcherAdapterRequestConfig,
-	): Promise<TResponse>;
-	post<TResponse, TBody = unknown>(
+	): Promise<z.infer<T>>;
+
+	post<T extends ZodType, B = unknown>(
 		url: string,
-		body?: TBody,
+		schema: T,
+		body?: B,
 		config?: IFetcherAdapterRequestConfig,
-	): Promise<TResponse>;
-	put<TResponse, TBody = unknown>(
+	): Promise<z.infer<T>>;
+
+	put<T extends ZodType, B = unknown>(
 		url: string,
-		body?: TBody,
+		schema: T,
+		body?: B,
 		config?: IFetcherAdapterRequestConfig,
-	): Promise<TResponse>;
-	patch<TResponse, TBody = unknown>(
+	): Promise<z.infer<T>>;
+
+	patch<T extends ZodType, B = unknown>(
 		url: string,
-		body?: TBody,
+		schema: T,
+		body?: B,
 		config?: IFetcherAdapterRequestConfig,
-	): Promise<TResponse>;
-	delete<TResponse, TBody = unknown>(
+	): Promise<z.infer<T>>;
+
+	delete<T extends ZodType, B = unknown>(
 		url: string,
-		body?: TBody,
+		schema: T,
+		body?: B,
 		config?: IFetcherAdapterRequestConfig,
-	): Promise<TResponse>;
+	): Promise<z.infer<T>>;
 }
 
 export interface IFetcherAdapterRequestConfig {
 	headers?: Record<string, string>;
 	params?: Record<string, string | number | boolean>;
-	responseType?: "json" | "string" | "void";
 }
 
 export interface IFetcherSideEffects {
 	onUnauthorized?: () => Promise<void> | void;
-	onForbidden?: () => Promise<void> | void;
-	onNotFound?: () => void;
 }

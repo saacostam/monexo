@@ -3,11 +3,12 @@ export enum QueryKeys {
 }
 
 export enum MutationKeys {
+	// AUTH
+	LOGIN = "Login",
+	SIGNUP = "SignUp",
+
 	// TODO
 	CREATE_TODO = "Create Todo",
 	DELETE_TODO = "Delete Todo",
 	PATCH_TODO = "Patch Todo",
-
-	// LOGIN
-	LOGIN = "Login",
 }

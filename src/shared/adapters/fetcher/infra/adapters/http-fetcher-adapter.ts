@@ -1,9 +1,14 @@
-import { DomainError, DomainErrorType } from "@/shared/errors/domain";
+import type { ZodType, z } from "zod";
 import type {
 	IFetcherAdapter,
 	IFetcherAdapterRequestConfig,
 	IFetcherSideEffects,
-} from "../../domain";
+} from "@/shared/adapters/fetcher/domain";
+import {
+	DomainError,
+	type DomainErrorField,
+	DomainErrorType,
+} from "@/shared/errors/domain";
 
 export class HttpFetcherAdapter implements IFetcherAdapter {
 	private readonly baseUrl?: string;
@@ -23,7 +28,7 @@ export class HttpFetcherAdapter implements IFetcherAdapter {
 	private buildUrl(
 		url: string,
 		params?: Record<string, string | number | boolean | null | undefined>,
-	): string {
+	) {
 		const fullUrl = this.baseUrl
 			? `${this.baseUrl.replace(/\/$/, "")}/${url.replace(/^\//, "")}`
 			: url;
@@ -31,15 +36,9 @@ export class HttpFetcherAdapter implements IFetcherAdapter {
 		if (!params) return fullUrl;
 
 		const query = new URLSearchParams(
-			Object.entries(params).reduce<Record<string, string>>(
-				(acc, [key, value]) => {
-					if (value !== null && value !== undefined) {
-						acc[key] = String(value);
-					}
-					return acc;
-				},
-				{},
-			),
+			Object.entries(params)
+				.filter(([, v]) => v != null)
+				.map(([k, v]) => [k, String(v)]),
 		).toString();
 
 		return query ? `${fullUrl}?${query}` : fullUrl;
@@ -50,136 +49,166 @@ export class HttpFetcherAdapter implements IFetcherAdapter {
 		hasBody = false,
 	): HeadersInit {
 		return {
-			...(hasBody ? { "Content-Type": "application/json" } : {}),
+			...(hasBody && { "Content-Type": "application/json" }),
 			...this.defaultHeaders,
 			...config?.headers,
 		};
 	}
 
-	private async request<TResponse>(
+	private async request<T extends ZodType>(
 		method: string,
 		url: string,
+		schema: T,
 		body?: unknown,
 		config?: IFetcherAdapterRequestConfig,
-	): Promise<TResponse> {
-		const hasBody = body !== undefined;
-
-		const response = await fetch(this.buildUrl(url, config?.params), {
+	): Promise<z.infer<T>> {
+		const res = await fetch(this.buildUrl(url, config?.params), {
 			method,
-			headers: this.buildHeaders(config, hasBody),
-			body: hasBody ? JSON.stringify(body) : undefined,
+			headers: this.buildHeaders(config, body !== undefined),
+			body: body !== undefined ? JSON.stringify(body) : undefined,
 		});
 
-		if (!response.ok) {
-			const errorBody = await response.text().catch(() => "");
+		const raw = await res.text().catch(() => "");
 
-			switch (response.status) {
-				case 401:
-					this.sideEffects?.onUnauthorized?.();
-					throw new DomainError({
-						type: DomainErrorType.UNAUTHORIZED,
-						userMsg: "Unauthorized",
-						msg: errorBody,
-					});
-
-				case 403:
-					this.sideEffects?.onForbidden?.();
-					throw new DomainError({
-						type: DomainErrorType.FORBIDDEN,
-						userMsg: "Forbidden",
-						msg: errorBody,
-					});
-
-				case 404:
-					this.sideEffects?.onNotFound?.();
-					throw new DomainError({
-						type: DomainErrorType.NOT_FOUND,
-						userMsg: "Not found",
-						msg: `[HttpFetcherAdapter.404]: ${errorBody}`,
-					});
-
-				default:
-					throw new DomainError({
-						type: DomainErrorType.UNKNOWN,
-						userMsg: "Unexpected server error",
-						msg: `HTTP ${response.status} ${response.statusText}: ${errorBody}`,
-					});
+		let parsed: unknown;
+		if (raw) {
+			try {
+				parsed = JSON.parse(raw);
+			} catch {
+				parsed = raw;
 			}
 		}
 
-		if (response.status === 204) {
-			if (config?.responseType === "void") {
-				return undefined as TResponse;
+		if (!res.ok) {
+			const fields = this.getFieldErrors(parsed);
+			const userMsg = this.getErrorMessage(parsed) ?? "Unexpected Server Error";
+
+			if (res.status === 401) {
+				this.sideEffects?.onUnauthorized?.();
 			}
 
+			const typeMap: Record<number, DomainErrorType> = {
+				401: DomainErrorType.UNAUTHORIZED,
+				403: DomainErrorType.FORBIDDEN,
+				404: DomainErrorType.NOT_FOUND,
+			};
+
 			throw new DomainError({
-				type: DomainErrorType.INVALID_RESPONSE,
-				userMsg: "Unexpected empty response",
-				msg: "Expected response body but received 204 No Content",
+				type: typeMap[res.status] ?? DomainErrorType.UNKNOWN,
+				userMsg,
+				msg: `HTTP ${res.status} ${res.statusText}: ${raw}`,
+				fields,
 			});
 		}
 
-		const text = await response.text();
-
-		if (!text) {
-			throw new DomainError({
-				type: DomainErrorType.INVALID_RESPONSE,
-				userMsg: "Empty response body",
-				msg: "Response body was empty but a payload was expected",
-			});
+		// 204 or empty → let schema decide (z.void(), z.undefined(), etc.)
+		if (!raw) {
+			try {
+				return schema.parse(undefined);
+			} catch {
+				throw new DomainError({
+					type: DomainErrorType.INVALID_RESPONSE,
+					userMsg: "Unexpected App Error",
+					msg: "Response body was empty",
+				});
+			}
 		}
 
-		if (config?.responseType === "string") {
-			return text as TResponse;
-		}
-
+		// Non-empty response
 		try {
-			return JSON.parse(text) as TResponse;
-		} catch {
+			return schema.parse(parsed);
+		} catch (err) {
 			throw new DomainError({
 				type: DomainErrorType.INVALID_RESPONSE,
-				userMsg: "Invalid server response",
-				msg: `Invalid JSON response: ${text}`,
+				userMsg: "Unexpected App Error",
+				msg: `[HttpFetcherAdapter] Schema parse errored out - ${String(err)}`,
 			});
 		}
 	}
 
-	get<TResponse>(
+	get<T extends ZodType>(
 		url: string,
+		schema: T,
 		config?: IFetcherAdapterRequestConfig,
-	): Promise<TResponse> {
-		return this.request<TResponse>("GET", url, undefined, config);
+	) {
+		return this.request("GET", url, schema, undefined, config);
 	}
 
-	post<TResponse, TBody = unknown>(
+	post<T extends ZodType, B = unknown>(
 		url: string,
-		body?: TBody,
+		schema: T,
+		body?: B,
 		config?: IFetcherAdapterRequestConfig,
-	): Promise<TResponse> {
-		return this.request<TResponse>("POST", url, body, config);
+	) {
+		return this.request("POST", url, schema, body, config);
 	}
 
-	put<TResponse, TBody = unknown>(
+	put<T extends ZodType, B = unknown>(
 		url: string,
-		body?: TBody,
+		schema: T,
+		body?: B,
 		config?: IFetcherAdapterRequestConfig,
-	): Promise<TResponse> {
-		return this.request<TResponse>("PUT", url, body, config);
+	) {
+		return this.request("PUT", url, schema, body, config);
 	}
 
-	patch<TResponse, TBody = unknown>(
+	patch<T extends ZodType, B = unknown>(
 		url: string,
-		body?: TBody,
+		schema: T,
+		body?: B,
 		config?: IFetcherAdapterRequestConfig,
-	): Promise<TResponse> {
-		return this.request<TResponse>("PATCH", url, body, config);
+	) {
+		return this.request("PATCH", url, schema, body, config);
 	}
 
-	delete<TResponse, TBody = unknown>(
+	delete<T extends ZodType, B = unknown>(
 		url: string,
-		body?: TBody,
+		schema: T,
+		body?: B,
 		config?: IFetcherAdapterRequestConfig,
-	): Promise<TResponse> {
-		return this.request<TResponse>("DELETE", url, body, config);
+	) {
+		return this.request("DELETE", url, schema, body, config);
+	}
+
+	private getErrorMessage(payload: unknown): string | undefined {
+		if (
+			typeof payload === "object" &&
+			payload !== null &&
+			"message" in payload &&
+			typeof payload.message === "string"
+		) {
+			return payload.message;
+		}
+	}
+
+	private getFieldErrors(payload: unknown): DomainErrorField[] | undefined {
+		if (
+			typeof payload === "object" &&
+			payload !== null &&
+			"errors" in payload &&
+			this.isFieldErrorArray(payload.errors)
+		) {
+			return payload.errors.map((field) => ({
+				name: field.field,
+				message: field.message,
+			}));
+		}
+	}
+
+	private isFieldErrorArray(
+		value: unknown,
+	): value is { field: string; message: string }[] {
+		return (
+			Array.isArray(value) &&
+			value.every(
+				(e) =>
+					typeof e === "object" &&
+					e !== null &&
+					"field" in e &&
+					"message" in e &&
+					typeof e.field === "string" &&
+					typeof e.message === "string",
+			)
+		);
 	}
 }
