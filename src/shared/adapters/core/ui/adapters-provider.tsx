@@ -4,7 +4,7 @@ import { useMockAnalyticsProvider } from "@/shared/adapters/analytics/infra";
 import { AdaptersContext } from "@/shared/adapters/core/app";
 import type { IAdapters } from "@/shared/adapters/core/domain";
 import { useMockErrorMonitoringAdapter } from "@/shared/adapters/error-monitoring/infra";
-import { HttpFetcherAdapter } from "@/shared/adapters/fetcher/infra";
+import { useHttpFetcherAdapter } from "@/shared/adapters/fetcher/infra";
 import { useNotificationAdapter } from "@/shared/adapters/notification/infra";
 import { useLocalStoragePersistenceAdapter } from "@/shared/adapters/persistence/infra";
 import { usePersistanceSessionAdapter } from "@/shared/adapters/session/infra";
@@ -56,24 +56,25 @@ function AdaptersProviderDependencyInjection({ children }: PropsWithChildren) {
 	const sessionAdapter = usePersistanceSessionAdapter(persistenceAdapter);
 	const themeAdapter = useThemeAdapterImpl();
 
-	const fetcherAdapter = useMemo(
-		() =>
-			new HttpFetcherAdapter(
-				{
-					onUnauthorized: async () => {
-						sessionAdapter.removeToken();
-						await nav(
-							genRoute({
-								name: RouteName.HOME,
-							}),
-						);
-					},
-				},
-				{
-					baseUrl: import.meta.env.VITE_API_URL,
-				},
-			),
-		[nav, sessionAdapter],
+	const fetcherAdapter = useHttpFetcherAdapter(
+		{
+			onUnauthorized: async () => {
+				sessionAdapter.removeToken();
+				await nav(
+					genRoute({
+						name: RouteName.HOME,
+					}),
+				);
+			},
+		},
+		{
+			baseUrl: import.meta.env.VITE_API_URL,
+			defaultHeaders: {
+				...(sessionAdapter.session.type === "authenticated"
+					? { Authorization: `Bearer ${sessionAdapter.session.token}` }
+					: {}),
+			},
+		},
 	);
 
 	const adapters: IAdapters = useMemo(

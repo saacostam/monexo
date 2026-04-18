@@ -1,1 +1,1 @@
-export * from "./http-fetcher-adapter";
+export * from "./use-http-fetcher-adapter";
