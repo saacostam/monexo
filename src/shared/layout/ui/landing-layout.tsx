@@ -23,7 +23,7 @@ export function LandingLayout({ children }: PropsWithChildren) {
 					<UnstyledButton
 						component={Link}
 						to={genRoute({
-							name: RouteName.LANDING,
+							name: RouteName.LOGIN,
 						})}
 					>
 						<Logo />

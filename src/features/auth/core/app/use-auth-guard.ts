@@ -20,8 +20,7 @@ export function useAuthGuard() {
 	);
 
 	const shouldGoToApp = session.type === "authenticated" && isPublicRoute;
-	const shouldGoToLanding =
-		session.type === "unauthenticated" && !isPublicRoute;
+	const shouldGoToLogin = session.type === "unauthenticated" && !isPublicRoute;
 
 	useEffect(() => {
 		if (shouldGoToApp) {
@@ -30,12 +29,12 @@ export function useAuthGuard() {
 	}, [nav, shouldGoToApp]);
 
 	useEffect(() => {
-		if (shouldGoToLanding) {
-			nav(genRoute({ name: RouteName.LANDING }));
+		if (shouldGoToLogin) {
+			nav(genRoute({ name: RouteName.LOGIN }));
 		}
-	}, [nav, shouldGoToLanding]);
+	}, [nav, shouldGoToLogin]);
 
-	const pending = shouldGoToApp || shouldGoToLanding;
+	const pending = shouldGoToApp || shouldGoToLogin;
 
 	return useMemo(() => (pending ? "loading" : "success"), [pending]);
 }

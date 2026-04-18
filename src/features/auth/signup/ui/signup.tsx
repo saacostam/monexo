@@ -1,9 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
 	Alert,
+	Anchor,
 	Box,
 	Button,
 	Card,
+	Divider,
+	Flex,
 	PasswordInput,
 	Space,
 	Text,
@@ -11,10 +14,11 @@ import {
 } from "@mantine/core";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import z from "zod";
 import { useMutateSignup } from "@/features/auth/core/app";
 import { useAdapters } from "@/shared/adapters/core/app";
+import { Logo } from "@/shared/components";
 import { genRoute, RouteName } from "@/shared/router/app";
 import { FormUtils } from "@/shared/utils/form";
 
@@ -46,7 +50,7 @@ export function SignUp() {
 				},
 				{
 					onSuccess: () => {
-						nav(genRoute({ name: RouteName.LANDING }));
+						nav(genRoute({ name: RouteName.LOGIN }));
 
 						analyticsAdapter.trackEvent({
 							name: "signup",
@@ -90,6 +94,10 @@ export function SignUp() {
 	return (
 		<Card mx="auto" maw="512" withBorder data-testid="signup">
 			<form onSubmit={form.handleSubmit(onSubmit)}>
+				<Flex justify="center" style={{ scale: 1.2 }}>
+					<Logo />
+				</Flex>
+				<Divider my="md" />
 				<Box ta="center" mb="md">
 					<Text size="xl" fw="bold">
 						Sign Up
@@ -121,6 +129,17 @@ export function SignUp() {
 				<Button fullWidth loading={signUp.isPending} type="submit">
 					Sign Up
 				</Button>
+				<Space h="xl" />
+				<Text size="sm" ta="center">
+					Already have an account?{" "}
+					<Anchor
+						component={Link}
+						inherit
+						to={genRoute({ name: RouteName.LOGIN })}
+					>
+						Login
+					</Anchor>
+				</Text>
 			</form>
 		</Card>
 	);

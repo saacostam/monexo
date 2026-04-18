@@ -41,7 +41,7 @@ describe("AuthGuard [Integration]", () => {
 	it("should render children if accessing a public route and unauthenticated", () => {
 		const { di } = setupAuthGuard({
 			pathname: genRoute({
-				name: RouteName.LANDING,
+				name: RouteName.LOGIN,
 			}),
 			sessionState: { type: "unauthenticated" },
 		});
@@ -99,7 +99,7 @@ describe("AuthGuard [Integration]", () => {
 		await waitFor(() => {
 			expect(mockNavigate).toHaveBeenCalledWith(
 				genRoute({
-					name: RouteName.LANDING,
+					name: RouteName.LOGIN,
 				}),
 			);
 		});
@@ -108,7 +108,7 @@ describe("AuthGuard [Integration]", () => {
 	it("should redirect to home if authenticated and accessing auth route", async () => {
 		const { di } = setupAuthGuard({
 			pathname: genRoute({
-				name: RouteName.LANDING,
+				name: RouteName.LOGIN,
 			}),
 			sessionState: { type: "authenticated", token: "token" },
 		});

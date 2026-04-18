@@ -12,7 +12,8 @@ import { genRoute, RouteName } from "@/shared/router/app";
 // Lazy imports
 const ErrorScreen = lazy(() => import("@/shared/screens/error-screen"));
 const HomeScreen = lazy(() => import("@/shared/screens/home-screen"));
-const LandingScreen = lazy(() => import("@/shared/screens/landing-screen"));
+const LoginScreen = lazy(() => import("@/shared/screens/login-screen"));
+const SignupScreen = lazy(() => import("@/shared/screens/signup-screen"));
 
 export interface RouterProps {
 	Provider: JSXElementConstructor<PropsWithChildren>;
@@ -25,13 +26,15 @@ export function Router({ Provider }: RouterProps) {
 				<Routes>
 					<Route element={<Outlet />}>
 						<Route
-							index
 							element={
 								<LandingLayout>
-									<LandingScreen />
+									<Outlet />
 								</LandingLayout>
 							}
-						/>
+						>
+							<Route index element={<LoginScreen />} />
+							<Route path="signup" element={<SignupScreen />} />
+						</Route>
 						<Route path="app" element={<AppLayout>{<Outlet />}</AppLayout>}>
 							<Route element={<HomeScreen />} index />
 						</Route>
@@ -41,7 +44,7 @@ export function Router({ Provider }: RouterProps) {
 						element={
 							<ErrorScreen
 								resetHref={genRoute({
-									name: RouteName.LANDING,
+									name: RouteName.LOGIN,
 								})}
 							/>
 						}

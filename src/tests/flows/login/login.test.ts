@@ -19,7 +19,7 @@ describe("Login", () => {
 		renderAppRoot({
 			...di,
 			route: genRoute({
-				name: RouteName.LANDING,
+				name: RouteName.LOGIN,
 			}),
 		});
 
