@@ -1,5 +1,6 @@
 export * from "./arrow-left.icon";
 export * from "./arrow-right.icon";
+export * from "./arrow-right-start-on-rectangle.icon";
 export * from "./bank-notes.icon";
 export * from "./chart-bar.icon";
 export * from "./chevron-down.icon";
