@@ -3,15 +3,15 @@ import type { ICategoryClientPayload } from "@/features/category/core/domain";
 import { MutationKeys, QueryKeys, useMetaMutation } from "@/shared/async-state";
 import { useClients } from "@/shared/clients/app";
 
-export function useMutateCreateCategory() {
+export function useMutateUpdateCategory() {
 	const queryClient = useQueryClient();
 
 	const { category } = useClients();
 
 	return useMetaMutation({
-		mutationKey: [MutationKeys.CREATE_CATEGORY],
-		mutationFn: (req: ICategoryClientPayload["CreateRequest"]) =>
-			category.create(req),
+		mutationKey: [MutationKeys.UPDATE_CATEGORY],
+		mutationFn: (req: ICategoryClientPayload["UpdateRequest"]) =>
+			category.update(req),
 		onSettled: () => {
 			queryClient.invalidateQueries({
 				queryKey: [QueryKeys.QUERY_CATEGORIES],

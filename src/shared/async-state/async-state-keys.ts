@@ -1,6 +1,7 @@
 export enum QueryKeys {
 	// CATEGORY
 	QUERY_CATEGORIES = "Query Categories",
+	QUERY_CATEGORY_BY_ID = "Query Category By Id",
 
 	// TODO
 	QUERY_TODOS = "Query Todos",
@@ -16,6 +17,7 @@ export enum MutationKeys {
 
 	// CATEGORY
 	CREATE_CATEGORY = "Create Category",
+	UPDATE_CATEGORY = "Update Category",
 
 	// TODO
 	CREATE_TODO = "Create Todo",
