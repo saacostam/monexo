@@ -35,10 +35,10 @@ export function Router({ Provider }: RouterProps) {
 						>
 							<Route index element={<LoginScreen />} />
 							<Route path="signup" element={<SignupScreen />} />
-							<Route path="category" element={<CategoryScreen />} />
 						</Route>
-						<Route path="app" element={<AppLayout>{<Outlet />}</AppLayout>}>
-							<Route element={<HomeScreen />} index />
+						<Route element={<AppLayout>{<Outlet />}</AppLayout>}>
+							<Route path="app" element={<HomeScreen />} />
+							<Route path="category" element={<CategoryScreen />} />
 						</Route>
 					</Route>
 					<Route
