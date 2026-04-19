@@ -1,3 +1,4 @@
 - [ ] Add error logging and inline form errors for:
     - [ ] Create Category
+    - [ ] Delete Category
     - [ ] Update Category
