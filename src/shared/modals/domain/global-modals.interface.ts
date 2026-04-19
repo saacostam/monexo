@@ -1,6 +1,7 @@
 export enum IModalType {
 	NONE = "NONE",
 	CREATE_CATEGORY = "CRATE_CATEGORY",
+	REMOVE_CATEGORY = "REMOVE_CATEGORY",
 	UPDATE_CATEGORY = "UPDATE_CATEGORY",
 }
 
@@ -10,6 +11,12 @@ export type IModal =
 	  }
 	| {
 			type: IModalType.CREATE_CATEGORY;
+	  }
+	| {
+			type: IModalType.REMOVE_CATEGORY;
+			payload: {
+				id: string;
+			};
 	  }
 	| {
 			type: IModalType.UPDATE_CATEGORY;

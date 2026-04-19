@@ -69,6 +69,18 @@ export function TableCategoriesContent({
 		[set],
 	);
 
+	const onClickDelete = useCallback(
+		(id: string) => {
+			set({
+				type: IModalType.REMOVE_CATEGORY,
+				payload: {
+					id,
+				},
+			});
+		},
+		[set],
+	);
+
 	return (
 		<Flex direction="column" gap="lg">
 			<Card withBorder>
@@ -134,7 +146,12 @@ export function TableCategoriesContent({
 													</ActionIcon>
 												</Tooltip>
 												<Tooltip label="Delete Category">
-													<ActionIcon color="red" size="xs" variant="light">
+													<ActionIcon
+														color="red"
+														onClick={() => onClickDelete(category.id)}
+														size="xs"
+														variant="light"
+													>
 														<TrashIcon />
 													</ActionIcon>
 												</Tooltip>

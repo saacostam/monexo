@@ -1,6 +1,7 @@
 import { Modal } from "@mantine/core";
 import { useCallback } from "react";
 import { CreateCategory } from "@/features/category/create/ui";
+import { DeleteCategory } from "@/features/category/delete/ui";
 import { UpdateCategory } from "@/features/category/update/ui";
 import { useAdapters } from "@/shared/adapters/core/app";
 import { getErrorCopy } from "@/shared/errors/domain";
@@ -26,6 +27,26 @@ export function GlobalModalsRenderer() {
 	const onCreateCategoryError = useCallback(
 		(e: unknown) => {
 			const error = getErrorCopy(e, "Failed to create category");
+
+			notificationAdapter.notify({
+				type: "error",
+				title: "Error",
+				msg: error,
+			});
+		},
+		[notificationAdapter.notify],
+	);
+
+	const onDeleteCategorySuccess = useCallback(() => {
+		notificationAdapter.notify({
+			type: "success",
+			title: "Delete",
+			msg: "Category deleted",
+		});
+	}, [notificationAdapter.notify]);
+	const onDeleteCategoryError = useCallback(
+		(e: unknown) => {
+			const error = getErrorCopy(e, "Failed to delete category");
 
 			notificationAdapter.notify({
 				type: "error",
@@ -79,6 +100,21 @@ export function GlobalModalsRenderer() {
 						id={modal.payload.id}
 						onError={onUpdateCategoryError}
 						onSuccess={onUpdateCategorySuccess}
+						onSettled={onClose}
+					/>
+				)}
+			</Modal>
+			<Modal
+				opened={modal.type === IModalType.REMOVE_CATEGORY}
+				onClose={onClose}
+				title="Delete Category"
+			>
+				{modal.type === IModalType.REMOVE_CATEGORY && (
+					<DeleteCategory
+						id={modal.payload.id}
+						onCancel={onClose}
+						onError={onDeleteCategoryError}
+						onSuccess={onDeleteCategorySuccess}
 						onSettled={onClose}
 					/>
 				)}
