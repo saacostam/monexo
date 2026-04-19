@@ -1,6 +1,7 @@
 import { Modal } from "@mantine/core";
 import { useCallback } from "react";
 import { CreateCategory } from "@/features/category/create/ui";
+import { UpdateCategory } from "@/features/category/update/ui";
 import { useAdapters } from "@/shared/adapters/core/app";
 import { getErrorCopy } from "@/shared/errors/domain";
 import { useGlobalModals } from "@/shared/modals/app";
@@ -22,10 +23,29 @@ export function GlobalModalsRenderer() {
 			msg: "Category created",
 		});
 	}, [notificationAdapter.notify]);
-
 	const onCreateCategoryError = useCallback(
 		(e: unknown) => {
 			const error = getErrorCopy(e, "Failed to create category");
+
+			notificationAdapter.notify({
+				type: "error",
+				title: "Error",
+				msg: error,
+			});
+		},
+		[notificationAdapter.notify],
+	);
+
+	const onUpdateCategorySuccess = useCallback(() => {
+		notificationAdapter.notify({
+			type: "success",
+			title: "Updated",
+			msg: "Category updated",
+		});
+	}, [notificationAdapter.notify]);
+	const onUpdateCategoryError = useCallback(
+		(e: unknown) => {
+			const error = getErrorCopy(e, "Failed to update category");
 
 			notificationAdapter.notify({
 				type: "error",
@@ -48,6 +68,20 @@ export function GlobalModalsRenderer() {
 					onSuccess={onCreateCategorySuccess}
 					onSettled={onClose}
 				/>
+			</Modal>
+			<Modal
+				opened={modal.type === IModalType.UPDATE_CATEGORY}
+				onClose={onClose}
+				title="Update Category"
+			>
+				{modal.type === IModalType.UPDATE_CATEGORY && (
+					<UpdateCategory
+						id={modal.payload.id}
+						onError={onUpdateCategoryError}
+						onSuccess={onUpdateCategorySuccess}
+						onSettled={onClose}
+					/>
+				)}
 			</Modal>
 		</section>
 	);

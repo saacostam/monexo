@@ -14,10 +14,12 @@ import {
 	Title,
 	Tooltip,
 } from "@mantine/core";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import type { ICategory } from "@/features/category/core/domain";
 import { EmptyQuery } from "@/shared/components";
 import { PencilSquareIcon, TrashIcon } from "@/shared/icons";
+import { useGlobalModals } from "@/shared/modals/app";
+import { IModalType } from "@/shared/modals/domain";
 
 export interface ManageCategoriesContentProps {
 	categories: ICategory[];
@@ -43,6 +45,8 @@ const FILTER_TYPES = [
 export function TableCategoriesContent({
 	categories,
 }: ManageCategoriesContentProps) {
+	const { set } = useGlobalModals();
+
 	const [filterType, setFilterType] =
 		useState<(typeof FILTER_TYPES)[number]["type"]>("All");
 
@@ -52,6 +56,18 @@ export function TableCategoriesContent({
 
 		return categories.filter(config.filter);
 	}, [categories, filterType]);
+
+	const onClickEdit = useCallback(
+		(id: string) => {
+			set({
+				type: IModalType.UPDATE_CATEGORY,
+				payload: {
+					id,
+				},
+			});
+		},
+		[set],
+	);
 
 	return (
 		<Flex direction="column" gap="lg">
@@ -109,7 +125,11 @@ export function TableCategoriesContent({
 												wrap="wrap"
 											>
 												<Tooltip label="Edit Category">
-													<ActionIcon size="xs" variant="light">
+													<ActionIcon
+														onClick={() => onClickEdit(category.id)}
+														size="xs"
+														variant="light"
+													>
 														<PencilSquareIcon />
 													</ActionIcon>
 												</Tooltip>
