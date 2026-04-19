@@ -1,0 +1,134 @@
+import {
+	ActionIcon,
+	Button,
+	Card,
+	Flex,
+	Input,
+	Space,
+	Table,
+	TableTbody,
+	TableTd,
+	TableTh,
+	TableThead,
+	TableTr,
+	Title,
+	Tooltip,
+} from "@mantine/core";
+import { useMemo, useState } from "react";
+import type { ICategory } from "@/features/category/core/domain";
+import { EmptyQuery } from "@/shared/components";
+import { PencilSquareIcon, TrashIcon } from "@/shared/icons";
+
+export interface ManageCategoriesContentProps {
+	categories: ICategory[];
+}
+
+const FILTER_TYPES = [
+	{
+		type: "All",
+		filter: (_category: ICategory): boolean => true,
+	},
+	{
+		type: "Mine",
+		filter: (category: ICategory): boolean =>
+			category.ownership.type === "private",
+	},
+	{
+		type: "Public",
+		filter: (category: ICategory): boolean =>
+			category.ownership.type === "public",
+	},
+] as const;
+
+export function TableCategoriesContent({
+	categories,
+}: ManageCategoriesContentProps) {
+	const [filterType, setFilterType] =
+		useState<(typeof FILTER_TYPES)[number]["type"]>("All");
+
+	const filteredCategories = useMemo(() => {
+		const config =
+			FILTER_TYPES.find((c) => c.type === filterType) ?? FILTER_TYPES[0];
+
+		return categories.filter(config.filter);
+	}, [categories, filterType]);
+
+	return (
+		<Flex direction="column" gap="lg">
+			<Card withBorder>
+				<Title size="h4">Filters</Title>
+				<Space h="sm" />
+				<Flex align="end" direction="row" gap="md" wrap="wrap">
+					<Input placeholder="Search..." flex="1" miw="0" size="sm" />
+					<Flex direction="row" gap="xs">
+						{FILTER_TYPES.map(({ type }) => (
+							<Button
+								key={type}
+								onClick={() => setFilterType(type)}
+								size="sm"
+								variant={filterType === type ? "filled" : "outline"}
+							>
+								{type}
+							</Button>
+						))}
+					</Flex>
+				</Flex>
+			</Card>
+			<Card withBorder>
+				{filteredCategories.length === 0 ? (
+					<EmptyQuery title="No categories yet" />
+				) : (
+					<Table>
+						<TableThead>
+							<TableTr>
+								<TableTh>Name</TableTh>
+								<TableTh visibleFrom="xs">Description</TableTh>
+								<TableTh>Type</TableTh>
+								<TableTh style={{ minWidth: "20%", textAlign: "end" }}>
+									Actions
+								</TableTh>
+							</TableTr>
+						</TableThead>
+						<TableTbody>
+							{filteredCategories.map((category) => (
+								<TableTr key={category.id}>
+									<TableTd>{category.name}</TableTd>
+									<TableTd visibleFrom="xs">{category.description}</TableTd>
+									<TableTd>
+										{category.ownership.type === "public"
+											? "Public"
+											: "Private"}
+									</TableTd>
+									<TableTd style={{ textAlign: "end" }}>
+										{category.ownership.type === "private" ? (
+											<Flex
+												align="center"
+												direction="row"
+												justify="end"
+												gap="md"
+												wrap="wrap"
+											>
+												<Tooltip label="Edit Category">
+													<ActionIcon size="xs" variant="light">
+														<PencilSquareIcon />
+													</ActionIcon>
+												</Tooltip>
+												<Tooltip label="Delete Category">
+													<ActionIcon color="red" size="xs" variant="light">
+														<TrashIcon />
+													</ActionIcon>
+												</Tooltip>
+											</Flex>
+										) : (
+											"-"
+										)}
+									</TableTd>
+								</TableTr>
+							))}
+						</TableTbody>
+					</Table>
+				)}
+			</Card>
+		</Flex>
+	);
+}
