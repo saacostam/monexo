@@ -17,6 +17,7 @@ export function mockDi(overrides?: {
 		},
 		category: {
 			getAll: vi.fn(),
+			create: vi.fn(),
 		},
 		todoClient: {
 			createTodo: vi.fn(),

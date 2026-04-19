@@ -10,6 +10,16 @@ export interface UseCategoryClientArgs {
 export function useCategoryClient({
 	fetcher,
 }: UseCategoryClientArgs): ICategoryClient {
+	const create: ICategoryClient["create"] = useCallback(
+		({ name, description }) => {
+			return fetcher.post("/category", z.object({ id: z.string() }), {
+				name,
+				description,
+			});
+		},
+		[fetcher.post],
+	);
+
 	const getAll: ICategoryClient["getAll"] = useCallback(() => {
 		return fetcher.get(
 			"/category",
@@ -34,8 +44,9 @@ export function useCategoryClient({
 
 	return useMemo(
 		() => ({
+			create,
 			getAll,
 		}),
-		[getAll],
+		[create, getAll],
 	);
 }
