@@ -65,6 +65,13 @@ export function useCategoryClient({
 		[fetcher.get],
 	);
 
+	const remove: ICategoryClient["remove"] = useCallback(
+		({ id }) => {
+			return fetcher.delete(`/category/${id}`, z.void());
+		},
+		[fetcher.delete],
+	);
+
 	const update: ICategoryClient["update"] = useCallback(
 		({ id, name, description }) => {
 			return fetcher.put(`/category/${id}`, z.object({ id: z.string() }), {
@@ -80,8 +87,9 @@ export function useCategoryClient({
 			create,
 			getAll,
 			getById,
+			remove,
 			update,
 		}),
-		[create, getAll, getById, update],
+		[create, getAll, getById, remove, update],
 	);
 }

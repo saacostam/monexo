@@ -9,6 +9,7 @@ export interface ICategoryClient {
 	): Promise<ICategoryClientPayload["CreateResponse"]>;
 	getAll(): Promise<ICategoryClientPayload["GetAllResponse"]>;
 	getById(req: ICategoryClientPayload["GetByIdRequest"]): Promise<ICategory>;
+	remove(req: ICategoryClientPayload["RemoveRequest"]): Promise<void>;
 	update(
 		req: ICategoryClientPayload["UpdateRequest"],
 	): Promise<ICategoryClientPayload["UpdateResponse"]>;
@@ -29,6 +30,10 @@ export interface ICategoryClientPayload {
 	GetAllResponse: ICategory[];
 
 	GetByIdRequest: {
+		id: string;
+	};
+
+	RemoveRequest: {
 		id: string;
 	};
 
