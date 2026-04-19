@@ -1,9 +1,20 @@
-import { Box, Button, Flex, Grid, GridCol, Text, Title } from "@mantine/core";
+import {
+	Box,
+	Button,
+	Card,
+	Flex,
+	Grid,
+	GridCol,
+	Text,
+	Title,
+} from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
+import { Link } from "react-router";
 import { ExpensesBreakdown } from "@/features/expense/breakdown/ui";
 import { ExpensesStats } from "@/features/expense/stats/ui";
 import { ExpensesTable } from "@/features/expense/table/ui";
-import { CalendarDateRangeIcon, PlusIcon } from "@/shared/icons";
+import { CalendarDateRangeIcon, PlusIcon, TagIcon } from "@/shared/icons";
+import { genRoute, RouteName } from "@/shared/router/app";
 
 export default function HomeScreen() {
 	return (
@@ -40,7 +51,20 @@ export default function HomeScreen() {
 					<ExpensesTable />
 				</GridCol>
 				<GridCol span={{ base: 12, md: 4 }}>
-					<ExpensesBreakdown />
+					<Flex direction="column" gap="md">
+						<Card withBorder>
+							<Button
+								component={Link}
+								leftSection={<TagIcon height="1.2rem" width="1.2rem" />}
+								size="sm"
+								to={genRoute({ name: RouteName.CATEGORY })}
+								variant="outline"
+							>
+								Manage Categories
+							</Button>
+						</Card>
+						<ExpensesBreakdown />
+					</Flex>
 				</GridCol>
 			</Grid>
 		</Flex>
