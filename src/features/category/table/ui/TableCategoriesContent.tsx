@@ -47,6 +47,7 @@ export function TableCategoriesContent({
 }: ManageCategoriesContentProps) {
 	const { set } = useGlobalModals();
 
+	const [search, setSearch] = useState("");
 	const [filterType, setFilterType] =
 		useState<(typeof FILTER_TYPES)[number]["type"]>("All");
 
@@ -54,8 +55,13 @@ export function TableCategoriesContent({
 		const config =
 			FILTER_TYPES.find((c) => c.type === filterType) ?? FILTER_TYPES[0];
 
-		return categories.filter(config.filter);
-	}, [categories, filterType]);
+		const searchFilter = (c: ICategory) =>
+			search.trim() === ""
+				? true
+				: c.name.toLowerCase().includes(search.toLowerCase());
+
+		return categories.filter(config.filter).filter(searchFilter);
+	}, [categories, filterType, search]);
 
 	const onClickEdit = useCallback(
 		(id: string) => {
@@ -87,7 +93,14 @@ export function TableCategoriesContent({
 				<Title size="h4">Filters</Title>
 				<Space h="sm" />
 				<Flex align="end" direction="row" gap="md" wrap="wrap">
-					<Input placeholder="Search..." flex="1" miw="0" size="sm" />
+					<Input
+						flex="1"
+						miw="0"
+						onChange={(e) => setSearch(e.target.value)}
+						placeholder="Search..."
+						size="sm"
+						value={search}
+					/>
 					<Flex direction="row" gap="xs">
 						{FILTER_TYPES.map(({ type }) => (
 							<Button
