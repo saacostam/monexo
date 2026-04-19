@@ -1,6 +1,7 @@
 import { type PropsWithChildren, useMemo } from "react";
 import { useAuthClient } from "@/features/auth/core/infra";
 import { useCategoryClient } from "@/features/category/core/infra";
+import { useExpenseClient } from "@/features/expense/core/infra";
 import { useTodoClient } from "@/features/todo/infra";
 import { useUserClient } from "@/features/user/core/infra";
 import { useAdapters } from "@/shared/adapters/core/app";
@@ -26,6 +27,9 @@ export function ClientsProvider({ children }: PropsWithChildren) {
 	const categoryClient = useCategoryClient({
 		fetcher: fetcherAdapter,
 	});
+	const expenseClient = useExpenseClient({
+		fetcher: fetcherAdapter,
+	});
 	const todoClient = useTodoClient();
 	const userClient = useUserClient({
 		fetcher: fetcherAdapter,
@@ -35,10 +39,11 @@ export function ClientsProvider({ children }: PropsWithChildren) {
 		() => ({
 			authClient,
 			category: categoryClient,
+			expense: expenseClient,
 			todoClient,
 			user: userClient,
 		}),
-		[authClient, categoryClient, todoClient, userClient],
+		[authClient, categoryClient, expenseClient, todoClient, userClient],
 	);
 
 	return (
