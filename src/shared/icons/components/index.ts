@@ -13,4 +13,5 @@ export * from "./moon.icon";
 export * from "./pencil-square.icon";
 export * from "./plus.icon";
 export * from "./sun.icon";
+export * from "./tag.icon";
 export * from "./trash.icon";
