@@ -1,6 +1,6 @@
 export enum IModalType {
 	NONE = "NONE",
-	TEST = "TEST",
+	CREATE_CATEGORY = "CRATE_CATEGORY",
 }
 
 export type IModal =
@@ -8,7 +8,7 @@ export type IModal =
 			type: IModalType.NONE;
 	  }
 	| {
-			type: IModalType.TEST;
+			type: IModalType.CREATE_CATEGORY;
 	  };
 
 export interface IGlobalModals {
