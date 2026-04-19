@@ -30,7 +30,8 @@ const signUpSchema = z.object({
 export function SignUp() {
 	const nav = useNavigate();
 
-	const { analyticsAdapter, errorMonitoringAdapter } = useAdapters();
+	const { analyticsAdapter, errorMonitoringAdapter, notificationAdapter } =
+		useAdapters();
 
 	const form = useForm({
 		defaultValues: {
@@ -50,7 +51,11 @@ export function SignUp() {
 				},
 				{
 					onSuccess: () => {
-						nav(genRoute({ name: RouteName.LOGIN }));
+						notificationAdapter.notify({
+							type: "success",
+							msg: "User signed up",
+							title: "Signed up",
+						});
 
 						analyticsAdapter.trackEvent({
 							name: "signup",
@@ -58,6 +63,8 @@ export function SignUp() {
 								success: true,
 							},
 						});
+
+						nav(genRoute({ name: RouteName.LOGIN }));
 					},
 					onError: (error) => {
 						FormUtils.handleApiErrors({
@@ -75,6 +82,12 @@ export function SignUp() {
 								success: false,
 							},
 						});
+
+						notificationAdapter.notify({
+							type: "error",
+							title: "Error",
+							msg: "Unable to signup user. Please try again",
+						});
 					},
 				},
 			);
@@ -83,8 +96,9 @@ export function SignUp() {
 			analyticsAdapter.trackEvent,
 			errorMonitoringAdapter.report,
 			form.setError,
-			signUp,
 			nav,
+			notificationAdapter.notify,
+			signUp,
 		],
 	);
 
