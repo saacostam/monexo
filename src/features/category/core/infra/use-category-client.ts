@@ -42,11 +42,46 @@ export function useCategoryClient({
 		);
 	}, [fetcher.get]);
 
+	const getById: ICategoryClient["getById"] = useCallback(
+		({ id }) => {
+			return fetcher.get(
+				`/category/${id}`,
+				z.object({
+					id: z.string(),
+					name: z.string(),
+					description: z.string(),
+					ownership: z.discriminatedUnion("type", [
+						z.object({
+							type: z.literal("public"),
+						}),
+						z.object({
+							type: z.literal("private"),
+							userId: z.string(),
+						}),
+					]),
+				}),
+			);
+		},
+		[fetcher.get],
+	);
+
+	const update: ICategoryClient["update"] = useCallback(
+		({ id, name, description }) => {
+			return fetcher.put(`/category/${id}`, z.object({ id: z.string() }), {
+				name,
+				description,
+			});
+		},
+		[fetcher.put],
+	);
+
 	return useMemo(
 		() => ({
 			create,
 			getAll,
+			getById,
+			update,
 		}),
-		[create, getAll],
+		[create, getAll, getById, update],
 	);
 }

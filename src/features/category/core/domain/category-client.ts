@@ -8,6 +8,10 @@ export interface ICategoryClient {
 		req: ICategoryClientPayload["CreateRequest"],
 	): Promise<ICategoryClientPayload["CreateResponse"]>;
 	getAll(): Promise<ICategoryClientPayload["GetAllResponse"]>;
+	getById(req: ICategoryClientPayload["GetByIdRequest"]): Promise<ICategory>;
+	update(
+		req: ICategoryClientPayload["UpdateRequest"],
+	): Promise<ICategoryClientPayload["UpdateResponse"]>;
 }
 
 /**
@@ -23,4 +27,17 @@ export interface ICategoryClientPayload {
 	};
 
 	GetAllResponse: ICategory[];
+
+	GetByIdRequest: {
+		id: string;
+	};
+
+	UpdateRequest: {
+		id: string;
+		name: string;
+		description: string;
+	};
+	UpdateResponse: {
+		id: string;
+	};
 }
