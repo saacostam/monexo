@@ -2,3 +2,7 @@
     - [ ] Create Category
     - [ ] Delete Category
     - [ ] Update Category
+- [ ] Test Coverage
+    - [ ] View All Categories
+    - [ ] Update Category
+    - [ ] Delete Category
