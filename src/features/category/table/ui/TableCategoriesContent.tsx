@@ -95,13 +95,13 @@ export function TableCategoriesContent({
 				<Flex align="end" direction="row" gap="md" wrap="wrap">
 					<Input
 						flex="1"
-						miw="0"
+						miw="256"
 						onChange={(e) => setSearch(e.target.value)}
 						placeholder="Search..."
 						size="sm"
 						value={search}
 					/>
-					<Flex direction="row" gap="xs">
+					<Flex direction="row" gap="xs" wrap="wrap">
 						{FILTER_TYPES.map(({ type }) => (
 							<Button
 								key={type}
