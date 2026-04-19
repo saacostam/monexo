@@ -15,7 +15,7 @@ export function TableCategories() {
 
 	const retry = useRetry(
 		queryAllCategories.refetch,
-		queryAllCategories.isPending,
+		queryAllCategories.isLoading,
 	);
 
 	const onClickCreateCategory = useCallback(() => {
