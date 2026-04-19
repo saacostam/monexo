@@ -1,6 +1,6 @@
 import { type PropsWithChildren, useMemo } from "react";
 import { useAuthClient } from "@/features/auth/core/infra";
-import { useCategoryClient } from "@/features/category/infra";
+import { useCategoryClient } from "@/features/category/core/infra";
 import { useTodoClient } from "@/features/todo/infra";
 import { useUserClient } from "@/features/user/core/infra";
 import { useAdapters } from "@/shared/adapters/core/app";

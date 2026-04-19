@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from "react";
 import z from "zod";
-import type { ICategoryClient } from "@/features/category/domain";
+import type { ICategoryClient } from "@/features/category/core/domain";
 import type { IFetcherAdapter } from "@/shared/adapters/fetcher/domain";
 
 export interface UseCategoryClientArgs {
