@@ -15,6 +15,9 @@ export function mockDi(overrides?: {
 			login: vi.fn(),
 			signup: vi.fn(),
 		},
+		category: {
+			getAll: vi.fn(),
+		},
 		todoClient: {
 			createTodo: vi.fn(),
 			deleteTodo: vi.fn(),

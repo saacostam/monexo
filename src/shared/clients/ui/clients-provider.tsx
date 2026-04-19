@@ -1,5 +1,6 @@
 import { type PropsWithChildren, useMemo } from "react";
 import { useAuthClient } from "@/features/auth/core/infra";
+import { useCategoryClient } from "@/features/category/infra";
 import { useTodoClient } from "@/features/todo/infra";
 import { useUserClient } from "@/features/user/core/infra";
 import { useAdapters } from "@/shared/adapters/core/app";
@@ -22,6 +23,9 @@ export function ClientsProvider({ children }: PropsWithChildren) {
 	const authClient = useAuthClient({
 		fetcher: fetcherAdapter,
 	});
+	const categoryClient = useCategoryClient({
+		fetcher: fetcherAdapter,
+	});
 	const todoClient = useTodoClient();
 	const userClient = useUserClient({
 		fetcher: fetcherAdapter,
@@ -30,10 +34,11 @@ export function ClientsProvider({ children }: PropsWithChildren) {
 	const clients: IClients = useMemo(
 		() => ({
 			authClient,
+			category: categoryClient,
 			todoClient,
 			user: userClient,
 		}),
-		[authClient, todoClient, userClient],
+		[authClient, categoryClient, todoClient, userClient],
 	);
 
 	return (
