@@ -121,7 +121,11 @@ export function TableCategoriesContent({
 							{filteredCategories.map((category) => (
 								<TableTr key={category.id}>
 									<TableTd>{category.name}</TableTd>
-									<TableTd visibleFrom="xs">{category.description}</TableTd>
+									<TableTd visibleFrom="xs">
+										{category.description.length === 0
+											? "-"
+											: category.description}
+									</TableTd>
 									<TableTd>
 										{category.ownership.type === "public"
 											? "Public"
