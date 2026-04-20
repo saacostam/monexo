@@ -4,6 +4,7 @@ import { CreateCategory } from "@/features/category/create/ui";
 import { DeleteCategory } from "@/features/category/delete/ui";
 import { UpdateCategory } from "@/features/category/update/ui";
 import { CreateExpense } from "@/features/expense/create/ui";
+import { UpdateExpense } from "@/features/expense/update/ui";
 import { useAdapters } from "@/shared/adapters/core/app";
 import { getErrorCopy } from "@/shared/errors/domain";
 import { useGlobalModals } from "@/shared/modals/app";
@@ -99,6 +100,27 @@ export function GlobalModalsRenderer() {
 		[notificationAdapter.notify],
 	);
 
+	const onUpdateExpenseSuccess = useCallback(() => {
+		notificationAdapter.notify({
+			type: "success",
+			title: "Updated",
+			msg: "Expense updated",
+		});
+	}, [notificationAdapter.notify]);
+
+	const onUpdateExpenseError = useCallback(
+		(e: unknown) => {
+			const error = getErrorCopy(e, "Failed to update expense");
+
+			notificationAdapter.notify({
+				type: "error",
+				title: "Error",
+				msg: error,
+			});
+		},
+		[notificationAdapter.notify],
+	);
+
 	return (
 		<section>
 			<Modal
@@ -151,6 +173,20 @@ export function GlobalModalsRenderer() {
 					onSuccess={onCreateExpenseSuccess}
 					onSettled={onClose}
 				/>
+			</Modal>
+			<Modal
+				opened={modal.type === IModalType.UPDATE_EXPENSE}
+				onClose={onClose}
+				title="Update Expense"
+			>
+				{modal.type === IModalType.UPDATE_EXPENSE && (
+					<UpdateExpense
+						id={modal.payload.id}
+						onError={onUpdateExpenseError}
+						onSuccess={onUpdateExpenseSuccess}
+						onSettled={onClose}
+					/>
+				)}
 			</Modal>
 		</section>
 	);

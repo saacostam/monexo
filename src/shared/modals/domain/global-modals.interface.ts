@@ -6,6 +6,7 @@ export enum IModalType {
 	UPDATE_CATEGORY = "UPDATE_CATEGORY",
 
 	CREATE_EXPENSE = "CREATE_EXPENSE",
+	UPDATE_EXPENSE = "UPDATE_EXPENSE",
 }
 
 export type IModal =
@@ -29,6 +30,12 @@ export type IModal =
 	  }
 	| {
 			type: IModalType.CREATE_EXPENSE;
+	  }
+	| {
+			type: IModalType.UPDATE_EXPENSE;
+			payload: {
+				id: string;
+			};
 	  };
 
 export interface IGlobalModals {
