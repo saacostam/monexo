@@ -16,6 +16,8 @@ import { useAdapters } from "@/shared/adapters/core/app";
 import { IThemeVariant } from "@/shared/adapters/theme/domain";
 import { EmptyQuery } from "@/shared/components";
 import { PencilSquareIcon, TrashIcon } from "@/shared/icons";
+import { useGlobalModals } from "@/shared/modals/app";
+import { IModalType } from "@/shared/modals/domain";
 
 export interface ExpensesTableContentProps {
 	expenses: IWithCategory<IExpense>[];
@@ -23,6 +25,8 @@ export interface ExpensesTableContentProps {
 
 export function ExpensesTableContent({ expenses }: ExpensesTableContentProps) {
 	const { date, themeAdapter } = useAdapters();
+
+	const { set } = useGlobalModals();
 
 	const filteredExpenses = expenses;
 
@@ -68,7 +72,20 @@ export function ExpensesTableContent({ expenses }: ExpensesTableContentProps) {
 							{expense.description ? expense.description : "-"}
 						</TableTd>
 						<TableTd style={{ textAlign: "end" }}>
-							<Actions />
+							<Actions
+								onClickDelete={() =>
+									set({
+										type: IModalType.UPDATE_EXPENSE,
+										payload: { id: expense.id },
+									})
+								}
+								onClickEdit={() =>
+									set({
+										type: IModalType.UPDATE_EXPENSE,
+										payload: { id: expense.id },
+									})
+								}
+							/>
 						</TableTd>
 					</TableTr>
 				))}
@@ -77,15 +94,23 @@ export function ExpensesTableContent({ expenses }: ExpensesTableContentProps) {
 	);
 }
 
-const Actions = () => (
+const Actions = (props: {
+	onClickEdit: () => void;
+	onClickDelete: () => void;
+}) => (
 	<Flex direction="row" gap="xs" justify="end">
 		<Tooltip label="Edit">
-			<ActionIcon variant="subtle" size="xs">
+			<ActionIcon onClick={props.onClickEdit} size="xs" variant="subtle">
 				<PencilSquareIcon />
 			</ActionIcon>
 		</Tooltip>
 		<Tooltip label="Delete">
-			<ActionIcon color="red" variant="subtle" size="xs">
+			<ActionIcon
+				color="red"
+				onClick={props.onClickDelete}
+				size="xs"
+				variant="subtle"
+			>
 				<TrashIcon />
 			</ActionIcon>
 		</Tooltip>
