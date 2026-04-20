@@ -1,8 +1,11 @@
 export enum IModalType {
 	NONE = "NONE",
-	CREATE_CATEGORY = "CRATE_CATEGORY",
+
+	CREATE_CATEGORY = "CREATE_CATEGORY",
 	REMOVE_CATEGORY = "REMOVE_CATEGORY",
 	UPDATE_CATEGORY = "UPDATE_CATEGORY",
+
+	CREATE_EXPENSE = "CREATE_EXPENSE",
 }
 
 export type IModal =
@@ -23,6 +26,9 @@ export type IModal =
 			payload: {
 				id: string;
 			};
+	  }
+	| {
+			type: IModalType.CREATE_EXPENSE;
 	  };
 
 export interface IGlobalModals {

@@ -3,6 +3,7 @@ import { useCallback } from "react";
 import { CreateCategory } from "@/features/category/create/ui";
 import { DeleteCategory } from "@/features/category/delete/ui";
 import { UpdateCategory } from "@/features/category/update/ui";
+import { CreateExpense } from "@/features/expense/create/ui";
 import { useAdapters } from "@/shared/adapters/core/app";
 import { getErrorCopy } from "@/shared/errors/domain";
 import { useGlobalModals } from "@/shared/modals/app";
@@ -77,6 +78,27 @@ export function GlobalModalsRenderer() {
 		[notificationAdapter.notify],
 	);
 
+	const onCreateExpenseSuccess = useCallback(() => {
+		notificationAdapter.notify({
+			type: "success",
+			title: "Created",
+			msg: "Expense created",
+		});
+	}, [notificationAdapter.notify]);
+
+	const onCreateExpenseError = useCallback(
+		(e: unknown) => {
+			const error = getErrorCopy(e, "Failed to create expense");
+
+			notificationAdapter.notify({
+				type: "error",
+				title: "Error",
+				msg: error,
+			});
+		},
+		[notificationAdapter.notify],
+	);
+
 	return (
 		<section>
 			<Modal
@@ -118,6 +140,17 @@ export function GlobalModalsRenderer() {
 						onSettled={onClose}
 					/>
 				)}
+			</Modal>
+			<Modal
+				opened={modal.type === IModalType.CREATE_EXPENSE}
+				onClose={onClose}
+				title="Create Expense"
+			>
+				<CreateExpense
+					onError={onCreateExpenseError}
+					onSuccess={onCreateExpenseSuccess}
+					onSettled={onClose}
+				/>
 			</Modal>
 		</section>
 	);
