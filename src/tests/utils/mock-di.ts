@@ -42,6 +42,7 @@ export function mockDi(overrides?: {
 			trackEvent: vi.fn(),
 		},
 		date: {
+			fromYyyyMmDdToUtcMsSinceEpoch: vi.fn(),
 			todayInYyyyMmDd: vi.fn(),
 		},
 		errorMonitoringAdapter: {
