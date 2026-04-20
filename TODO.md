@@ -2,9 +2,11 @@
     - [ ] Create Category
     - [ ] Delete Category
     - [ ] Update Category
+    - [ ] Create Expense
 - [ ] Test Coverage
     - [ ] View All Categories
     - [ ] Update Category
     - [ ] Delete Category
+    - [ ] Create Expense
 - [ ] TableCategories - Match skeleton to content
 - [ ] ExpensesTable - Match skeleton to content
