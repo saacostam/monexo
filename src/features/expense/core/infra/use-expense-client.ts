@@ -30,20 +30,34 @@ export const expenseSchema = z.object({
 	date: z.number(),
 	userId: z.string(),
 	categoryId: z.string().nullable(),
-	category: categorySchema,
+	category: categorySchema.nullable(),
 });
 
 export function useExpenseClient({
 	fetcher,
 }: UseExpenseClientArgs): IExpenseClient {
+	const create: IExpenseClient["create"] = useCallback(
+		({ amount, categoryId, date, description, name }) => {
+			return fetcher.post("/expense", z.object({ id: z.string() }), {
+				amount,
+				categoryId,
+				date,
+				description,
+				name,
+			});
+		},
+		[fetcher.post],
+	);
+
 	const getAll: IExpenseClient["getAll"] = useCallback(() => {
 		return fetcher.get("/expense", z.array(expenseSchema));
 	}, [fetcher.get]);
 
 	return useMemo(
 		() => ({
+			create,
 			getAll,
 		}),
-		[getAll],
+		[create, getAll],
 	);
 }
