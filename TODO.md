@@ -6,3 +6,5 @@
     - [ ] View All Categories
     - [ ] Update Category
     - [ ] Delete Category
+- [ ] TableCategories - Match skeleton to content
+- [ ] ExpensesTable - Match skeleton to content
