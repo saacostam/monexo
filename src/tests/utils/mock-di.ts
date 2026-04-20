@@ -40,6 +40,9 @@ export function mockDi(overrides?: {
 		analyticsAdapter: {
 			trackEvent: vi.fn(),
 		},
+		date: {
+			todayInYyyyMmDd: vi.fn(),
+		},
 		errorMonitoringAdapter: {
 			report: vi.fn(),
 		},
