@@ -9,14 +9,25 @@ import {
 	Title,
 } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
+import { useCallback } from "react";
 import { Link } from "react-router";
 import { ExpensesBreakdown } from "@/features/expense/breakdown/ui";
 import { ExpensesStats } from "@/features/expense/stats/ui";
 import { ExpensesTable } from "@/features/expense/table/ui";
 import { CalendarDateRangeIcon, PlusIcon, TagIcon } from "@/shared/icons";
+import { useGlobalModals } from "@/shared/modals/app";
+import { IModalType } from "@/shared/modals/domain";
 import { genRoute, RouteName } from "@/shared/router/app";
 
 export default function HomeScreen() {
+	const { set } = useGlobalModals();
+
+	const onClickAddExpense = useCallback(() => {
+		set({
+			type: IModalType.CREATE_EXPENSE,
+		});
+	}, [set]);
+
 	return (
 		<Flex direction="column" gap="lg">
 			<Flex
@@ -34,6 +45,7 @@ export default function HomeScreen() {
 				</Box>
 				<Button
 					leftSection={<PlusIcon height="1.2rem" width="1.2rem" />}
+					onClick={onClickAddExpense}
 					size="md"
 				>
 					Add Expense
