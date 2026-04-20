@@ -3,6 +3,15 @@
  */
 export interface IDateAdapter {
 	/**
+	 * Converts a UTC timestamp (ms since epoch) into a local date string (YYYY-MM-DD).
+	 *
+	 * Interpretation:
+	 * - Input is treated as UTC
+	 * - Converted to client's local timezone
+	 * - Only the date portion is returned
+	 */
+	fromUtcMsSinceEpochToLocalYyyyMmDd(utcMsSinceEpoch: number): string | null;
+	/**
 	 * Interprets YYYY-MM-DD as local start of day and converts to UTC ms.
 	 */
 	fromYyyyMmDdToUtcMsSinceEpoch(
