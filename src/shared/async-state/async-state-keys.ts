@@ -3,6 +3,9 @@ export enum QueryKeys {
 	QUERY_CATEGORIES = "Query Categories",
 	QUERY_CATEGORY_BY_ID = "Query Category By Id",
 
+	// EXPENSES
+	QUERY_EXPENSES = "Query Expenses",
+
 	// TODO
 	QUERY_TODOS = "Query Todos",
 
