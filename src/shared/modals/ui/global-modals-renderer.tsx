@@ -4,6 +4,7 @@ import { CreateCategory } from "@/features/category/create/ui";
 import { DeleteCategory } from "@/features/category/delete/ui";
 import { UpdateCategory } from "@/features/category/update/ui";
 import { CreateExpense } from "@/features/expense/create/ui";
+import { DeleteExpense } from "@/features/expense/delete/ui";
 import { UpdateExpense } from "@/features/expense/update/ui";
 import { useAdapters } from "@/shared/adapters/core/app";
 import { getErrorCopy } from "@/shared/errors/domain";
@@ -86,10 +87,30 @@ export function GlobalModalsRenderer() {
 			msg: "Expense created",
 		});
 	}, [notificationAdapter.notify]);
-
 	const onCreateExpenseError = useCallback(
 		(e: unknown) => {
 			const error = getErrorCopy(e, "Failed to create expense");
+
+			notificationAdapter.notify({
+				type: "error",
+				title: "Error",
+				msg: error,
+			});
+		},
+		[notificationAdapter.notify],
+	);
+
+	const onDeleteExpenseSuccess = useCallback(() => {
+		notificationAdapter.notify({
+			type: "success",
+			title: "Delete",
+			msg: "Expense deleted",
+		});
+	}, [notificationAdapter.notify]);
+
+	const onDeleteExpenseError = useCallback(
+		(e: unknown) => {
+			const error = getErrorCopy(e, "Failed to delete expense");
 
 			notificationAdapter.notify({
 				type: "error",
@@ -107,7 +128,6 @@ export function GlobalModalsRenderer() {
 			msg: "Expense updated",
 		});
 	}, [notificationAdapter.notify]);
-
 	const onUpdateExpenseError = useCallback(
 		(e: unknown) => {
 			const error = getErrorCopy(e, "Failed to update expense");
@@ -173,6 +193,21 @@ export function GlobalModalsRenderer() {
 					onSuccess={onCreateExpenseSuccess}
 					onSettled={onClose}
 				/>
+			</Modal>
+			<Modal
+				opened={modal.type === IModalType.REMOVE_EXPENSE}
+				onClose={onClose}
+				title="Delete Expense"
+			>
+				{modal.type === IModalType.REMOVE_EXPENSE && (
+					<DeleteExpense
+						id={modal.payload.id}
+						onCancel={onClose}
+						onError={onDeleteExpenseError}
+						onSuccess={onDeleteExpenseSuccess}
+						onSettled={onClose}
+					/>
+				)}
 			</Modal>
 			<Modal
 				opened={modal.type === IModalType.UPDATE_EXPENSE}
