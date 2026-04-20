@@ -22,7 +22,7 @@ export interface ExpensesTableContentProps {
 }
 
 export function ExpensesTableContent({ expenses }: ExpensesTableContentProps) {
-	const { themeAdapter } = useAdapters();
+	const { date, themeAdapter } = useAdapters();
 
 	const filteredExpenses = expenses;
 
@@ -51,21 +51,23 @@ export function ExpensesTableContent({ expenses }: ExpensesTableContentProps) {
 					<TableTh>Name</TableTh>
 					<TableTh>Category</TableTh>
 					<TableTh visibleFrom="xs">Description</TableTh>
-					<TableTh style={{ minWidth: "20%", textAlign: "end" }}>
-						Actions
-					</TableTh>
+					<TableTh style={{ textAlign: "end" }}>Actions</TableTh>
 				</TableTr>
 			</TableThead>
 			<TableTbody>
 				{filteredExpenses.map((expense) => (
 					<TableTr key={expense.id}>
-						<TableTd>{expense.date}</TableTd>
+						<TableTd>
+							{date.fromUtcMsSinceEpochToLocalYyyyMmDd(expense.date)}
+						</TableTd>
 						<TableTd>{expense.name}</TableTd>
 						<TableTd>
 							{expense.category ? <Badge>{expense.category.name}</Badge> : "-"}
 						</TableTd>
-						<TableTd visibleFrom="xs">{expense.description}</TableTd>
-						<TableTd>
+						<TableTd visibleFrom="xs">
+							{expense.description ? expense.description : "-"}
+						</TableTd>
+						<TableTd style={{ textAlign: "end" }}>
 							<Actions />
 						</TableTd>
 					</TableTr>
@@ -76,7 +78,7 @@ export function ExpensesTableContent({ expenses }: ExpensesTableContentProps) {
 }
 
 const Actions = () => (
-	<Flex direction="row" gap="xs">
+	<Flex direction="row" gap="xs" justify="end">
 		<Tooltip label="Edit">
 			<ActionIcon variant="subtle" size="xs">
 				<PencilSquareIcon />

@@ -6,16 +6,27 @@ import {
 	Skeleton,
 	TextInput,
 } from "@mantine/core";
+import { useCallback } from "react";
 import { useQueryExpenses } from "@/features/expense/core/app";
 import { useRetry } from "@/shared/async-state";
 import { QueryError } from "@/shared/components";
 import { PlusIcon } from "@/shared/icons";
+import { useGlobalModals } from "@/shared/modals/app";
+import { IModalType } from "@/shared/modals/domain";
 import { ExpensesTableContent } from "./ExpensesTableContent";
 
 export function ExpensesTable() {
 	const queryAllExpenses = useQueryExpenses().useQuery();
 
 	const retry = useRetry(queryAllExpenses.refetch, queryAllExpenses.isLoading);
+
+	const { set } = useGlobalModals();
+
+	const onClickAddExpense = useCallback(() => {
+		set({
+			type: IModalType.CREATE_EXPENSE,
+		});
+	}, [set]);
 
 	return (
 		<Card h="100%" withBorder>
@@ -28,6 +39,7 @@ export function ExpensesTable() {
 				<Button
 					leftSection={<PlusIcon height="1.2rem" width="1.2rem" />}
 					variant="outline"
+					onClick={onClickAddExpense}
 				>
 					Add Expense
 				</Button>
@@ -35,7 +47,7 @@ export function ExpensesTable() {
 			<Divider my="md" />
 			{queryAllExpenses.isError && (
 				<QueryError
-					msg="Unable to retrieve expenses informatin"
+					msg="Unable to retrieve expenses information"
 					retry={retry}
 					error={queryAllExpenses.error}
 					where="ExpensesTable.queryAllExpenses.isError"
