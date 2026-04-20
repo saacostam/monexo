@@ -26,6 +26,7 @@ export function mockDi(overrides?: {
 			create: vi.fn(),
 			getAll: vi.fn(),
 			getById: vi.fn(),
+			remove: vi.fn(),
 			update: vi.fn(),
 		},
 		todoClient: {

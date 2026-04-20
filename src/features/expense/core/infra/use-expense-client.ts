@@ -60,6 +60,13 @@ export function useExpenseClient({
 		[fetcher.get],
 	);
 
+	const remove: IExpenseClient["remove"] = useCallback(
+		({ id }) => {
+			return fetcher.delete(`/expense/${id}`, z.object({ id: z.string() }));
+		},
+		[fetcher.delete],
+	);
+
 	const update: IExpenseClient["update"] = useCallback(
 		({ id, amount, categoryId, date, description, name }) => {
 			return fetcher.put(`/expense/${id}`, z.object({ id: z.string() }), {
@@ -78,8 +85,9 @@ export function useExpenseClient({
 			create,
 			getAll,
 			getById,
+			remove,
 			update,
 		}),
-		[create, getAll, getById, update],
+		[create, getAll, getById, remove, update],
 	);
 }

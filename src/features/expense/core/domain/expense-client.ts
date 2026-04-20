@@ -7,6 +7,9 @@ export interface IExpenseClient {
 	create(
 		args: IExpenseClientPayload["CreateRequest"],
 	): Promise<IExpenseClientPayload["CreateResponse"]>;
+	remove(
+		args: IExpenseClientPayload["RemoveRequest"],
+	): Promise<IExpenseClientPayload["RemoveResponse"]>;
 	getAll(): Promise<IExpenseClientPayload["GetAllResponse"]>;
 	getById(
 		args: IExpenseClientPayload["GetByIdRequest"],
@@ -28,6 +31,13 @@ export interface IExpenseClientPayload {
 		name: string;
 	};
 	CreateResponse: {
+		id: string;
+	};
+
+	RemoveRequest: {
+		id: string;
+	};
+	RemoveResponse: {
 		id: string;
 	};
 
