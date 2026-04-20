@@ -75,7 +75,7 @@ export function ExpensesTableContent({ expenses }: ExpensesTableContentProps) {
 							<Actions
 								onClickDelete={() =>
 									set({
-										type: IModalType.UPDATE_EXPENSE,
+										type: IModalType.REMOVE_EXPENSE,
 										payload: { id: expense.id },
 									})
 								}
