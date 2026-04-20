@@ -23,6 +23,9 @@ export enum MutationKeys {
 	REMOVE_CATEGORY = "Remove Category",
 	UPDATE_CATEGORY = "Update Category",
 
+	// EXPENSE
+	CREATE_EXPENSE = "Create Expense",
+
 	// TODO
 	CREATE_TODO = "Create Todo",
 	DELETE_TODO = "Delete Todo",
