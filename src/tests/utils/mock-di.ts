@@ -25,6 +25,7 @@ export function mockDi(overrides?: {
 		expense: {
 			create: vi.fn(),
 			getAll: vi.fn(),
+			update: vi.fn(),
 		},
 		todoClient: {
 			createTodo: vi.fn(),

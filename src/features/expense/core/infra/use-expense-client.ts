@@ -53,11 +53,25 @@ export function useExpenseClient({
 		return fetcher.get("/expense", z.array(expenseSchema));
 	}, [fetcher.get]);
 
+	const update: IExpenseClient["update"] = useCallback(
+		({ id, amount, categoryId, date, description, name }) => {
+			return fetcher.put(`/expense/${id}`, z.object({ id: z.string() }), {
+				amount,
+				categoryId,
+				date,
+				description,
+				name,
+			});
+		},
+		[fetcher.put],
+	);
+
 	return useMemo(
 		() => ({
 			create,
 			getAll,
+			update,
 		}),
-		[create, getAll],
+		[create, getAll, update],
 	);
 }
