@@ -8,6 +8,9 @@ export interface IExpenseClient {
 		args: IExpenseClientPayload["CreateRequest"],
 	): Promise<IExpenseClientPayload["CreateResponse"]>;
 	getAll(): Promise<IExpenseClientPayload["GetAllResponse"]>;
+	getById(
+		args: IExpenseClientPayload["GetByIdRequest"],
+	): Promise<IExpenseClientPayload["GetByIdResponse"]>;
 	update(
 		args: IExpenseClientPayload["UpdateRequest"],
 	): Promise<IExpenseClientPayload["UpdateResponse"]>;
@@ -27,6 +30,11 @@ export interface IExpenseClientPayload {
 	CreateResponse: {
 		id: string;
 	};
+
+	GetByIdRequest: {
+		id: string;
+	};
+	GetByIdResponse: IWithCategory<IExpense>;
 
 	GetAllResponse: IWithCategory<IExpense>[];
 

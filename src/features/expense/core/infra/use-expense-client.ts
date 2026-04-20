@@ -53,6 +53,13 @@ export function useExpenseClient({
 		return fetcher.get("/expense", z.array(expenseSchema));
 	}, [fetcher.get]);
 
+	const getById: IExpenseClient["getById"] = useCallback(
+		({ id }) => {
+			return fetcher.get(`/expense/${id}`, expenseSchema);
+		},
+		[fetcher.get],
+	);
+
 	const update: IExpenseClient["update"] = useCallback(
 		({ id, amount, categoryId, date, description, name }) => {
 			return fetcher.put(`/expense/${id}`, z.object({ id: z.string() }), {
@@ -70,8 +77,9 @@ export function useExpenseClient({
 		() => ({
 			create,
 			getAll,
+			getById,
 			update,
 		}),
-		[create, getAll, update],
+		[create, getAll, getById, update],
 	);
 }
