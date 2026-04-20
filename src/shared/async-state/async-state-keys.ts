@@ -5,6 +5,7 @@ export enum QueryKeys {
 
 	// EXPENSES
 	QUERY_EXPENSES = "Query Expenses",
+	QUERY_EXPENSE_BY_ID = "Query Expense By Id",
 
 	// TODO
 	QUERY_TODOS = "Query Todos",

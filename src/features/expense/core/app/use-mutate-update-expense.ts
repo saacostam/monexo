@@ -12,9 +12,12 @@ export function useMutateUpdateExpense() {
 		mutationKey: [MutationKeys.UPDATE_EXPENSE],
 		mutationFn: (req: IExpenseClientPayload["UpdateRequest"]) =>
 			expense.update(req),
-		onSettled: () => {
+		onSettled: (_, __, req) => {
 			queryClient.invalidateQueries({
 				queryKey: [QueryKeys.QUERY_EXPENSES],
+			});
+			queryClient.invalidateQueries({
+				queryKey: [QueryKeys.QUERY_EXPENSE_BY_ID, req.id],
 			});
 		},
 	});
