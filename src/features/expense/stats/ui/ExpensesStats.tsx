@@ -9,7 +9,7 @@ import {
 	Title,
 } from "@mantine/core";
 import type { ReactNode } from "react";
-import { FireIcon, MoonIcon, SunIcon } from "@/shared/icons";
+import { FireIcon, MoonIcon } from "@/shared/icons";
 
 const STATS: {
 	name: string;
@@ -26,13 +26,6 @@ const STATS: {
 		color: "blue",
 	},
 	{
-		name: "Remaining Budget",
-		icon: <SunIcon />,
-		amount: 3,
-		diff: 25,
-		color: "yellow",
-	},
-	{
 		name: "Today's Spend",
 		icon: <MoonIcon />,
 		amount: 56,
@@ -45,7 +38,7 @@ export function ExpensesStats() {
 	return (
 		<Grid gutter="md">
 			{STATS.map((stat) => (
-				<GridCol key={stat.name} span={{ base: 12, sm: 4 }}>
+				<GridCol key={stat.name} span={{ base: 12, sm: 6 }}>
 					<Card withBorder>
 						<Flex align="center" direction="row" gap="sm">
 							<ThemeIcon bdrs="100%" color={stat.color} p="0.125rem">

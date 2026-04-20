@@ -1,23 +1,15 @@
 import { PieChart } from "@mantine/charts";
 import {
-	ActionIcon,
 	Button,
 	Card,
 	Divider,
 	Flex,
 	Indicator,
-	Progress,
 	Text,
 	ThemeIcon,
 	Title,
-	Tooltip,
 } from "@mantine/core";
-import {
-	ArrowRightIcon,
-	BankNotesIcon,
-	ChartBarIcon,
-	PencilSquareIcon,
-} from "@/shared/icons";
+import { ArrowRightIcon, ChartBarIcon } from "@/shared/icons";
 
 const CHART_DATA = [
 	{ name: "House" as const, value: 400, color: "indigo.6" },
@@ -57,41 +49,6 @@ export function ExpensesBreakdown() {
 						</Text>
 					</Flex>
 				))}
-			</Flex>
-			<Divider my="md" />
-			<Flex
-				direction="row"
-				gap="xs"
-				justify="space-between"
-				mb="sm"
-				wrap="wrap"
-			>
-				<Flex align="center" direction="row" gap="xs" wrap="wrap">
-					<ThemeIcon bdrs="100%" p="0.25rem">
-						<BankNotesIcon />
-					</ThemeIcon>
-					<Title size="h4">Monthly Budget</Title>
-				</Flex>
-				<Tooltip label="Edit Budget">
-					<ActionIcon variant="subtle" size="xs">
-						<PencilSquareIcon />
-					</ActionIcon>
-				</Tooltip>
-			</Flex>
-			<Progress mb="xs" size="1.5rem" striped value={45} />
-			<Flex direction="row" justify="space-between">
-				<Text size="sm">
-					Spent:{" "}
-					<Text component="span" inherit fw="bold">
-						$14
-					</Text>
-				</Text>
-				<Text size="sm">
-					Remaining:{" "}
-					<Text component="span" inherit fw="bold">
-						$28
-					</Text>
-				</Text>
 			</Flex>
 			<Divider my="md" />
 			<Button
