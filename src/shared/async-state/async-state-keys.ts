@@ -25,6 +25,7 @@ export enum MutationKeys {
 
 	// EXPENSE
 	CREATE_EXPENSE = "Create Expense",
+	UPDATE_EXPENSE = "Update Expense",
 
 	// TODO
 	CREATE_TODO = "Create Todo",
