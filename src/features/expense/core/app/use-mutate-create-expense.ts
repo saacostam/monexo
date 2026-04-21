@@ -16,6 +16,9 @@ export function useMutateCreateExpense() {
 			queryClient.invalidateQueries({
 				queryKey: [QueryKeys.QUERY_EXPENSES],
 			});
+			queryClient.invalidateQueries({
+				queryKey: [QueryKeys.QUERY_EXPENSES_IN_RANGE],
+			});
 		},
 	});
 }

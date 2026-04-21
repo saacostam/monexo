@@ -17,6 +17,9 @@ export function useMutateUpdateExpense() {
 				queryKey: [QueryKeys.QUERY_EXPENSES],
 			});
 			queryClient.invalidateQueries({
+				queryKey: [QueryKeys.QUERY_EXPENSES_IN_RANGE],
+			});
+			queryClient.invalidateQueries({
 				queryKey: [QueryKeys.QUERY_EXPENSE_BY_ID, req.id],
 			});
 		},
