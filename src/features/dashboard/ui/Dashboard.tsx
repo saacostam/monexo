@@ -14,7 +14,7 @@ import {
 	Title,
 } from "@mantine/core";
 import { DatePickerInput, type DatesRangeValue } from "@mantine/dates";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Link } from "react-router";
 import { useDatePresets } from "@/features/dashboard/app";
 import { ExpensesBreakdown } from "@/features/expense/breakdown/ui";
@@ -37,12 +37,34 @@ export function Dashboard() {
 	const { set } = useGlobalModals();
 
 	const datePresets = useDatePresets();
-	const [dateRange, setDateRange] = useState<DatesRangeValue>(
+	const [dateRange, setDateRange] = useState<DatesRangeValue<string>>(
 		datePresets.at(0)?.datesRangeValue ?? [
 			date.todayInYyyyMmDd(),
 			date.todayInYyyyMmDd(),
 		],
 	);
+	const dateRangeInMsSinceEpoch = useMemo(() => {
+		// enforce: both must exist
+		const [startStr, endStr] = dateRange;
+		if (!startStr || !endStr) return undefined;
+
+		const toMs = (yyyyMmDd: string) => {
+			const res = date.fromYyyyMmDdToUtcMsSinceEpoch(yyyyMmDd);
+			return res.ok ? res.value : undefined;
+		};
+
+		const start = toMs(startStr);
+
+		let end: number | undefined;
+		const nextDay = date.plus(endStr, { days: 1 });
+		if (nextDay.ok) {
+			end = toMs(nextDay.value);
+		}
+
+		if (start === undefined || end === undefined) return undefined;
+
+		return { start, end };
+	}, [date.fromYyyyMmDdToUtcMsSinceEpoch, date.plus, dateRange]);
 
 	const onClickAddExpense = useCallback(() => {
 		set({
@@ -75,6 +97,7 @@ export function Dashboard() {
 			</Flex>
 			<Flex align="center" direction="row" gap="md" wrap="wrap" justify="end">
 				<DatePickerInput
+					allowSingleDateInRange
 					leftSection={<CalendarDateRangeIcon height="1.5rem" width="1.5rem" />}
 					onChange={setDateRange}
 					placeholder="Date"
@@ -113,7 +136,10 @@ export function Dashboard() {
 			<ExpensesStats />
 			<Grid>
 				<GridCol span={{ base: 12, md: 8 }}>
-					<ExpensesTable />
+					<ExpensesTable
+						start={dateRangeInMsSinceEpoch?.start ?? null}
+						end={dateRangeInMsSinceEpoch?.end ?? null}
+					/>
 				</GridCol>
 				<GridCol span={{ base: 12, md: 4 }}>
 					<Flex direction="column" gap="md">

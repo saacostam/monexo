@@ -5,7 +5,7 @@ import { useAdapters } from "@/shared/adapters/core/app";
 export interface IDatePreset {
 	id: string;
 	label: string;
-	datesRangeValue: DatesRangeValue;
+	datesRangeValue: DatesRangeValue<string>;
 }
 
 export function useDatePresets(): IDatePreset[] {
@@ -47,7 +47,7 @@ export function useDatePresets(): IDatePreset[] {
 							datesRangeValue: [
 								thisWeekStart,
 								thisWeekEnd.value,
-							] as DatesRangeValue,
+							] as DatesRangeValue<string>,
 						},
 					]
 				: []),
@@ -60,7 +60,7 @@ export function useDatePresets(): IDatePreset[] {
 							datesRangeValue: [
 								thisMonthStart,
 								thisMonthEnd.value,
-							] as DatesRangeValue,
+							] as DatesRangeValue<string>,
 						},
 					]
 				: []),
@@ -70,7 +70,7 @@ export function useDatePresets(): IDatePreset[] {
 						{
 							id: "next-7-days",
 							label: "Next 7 Days",
-							datesRangeValue: [today, next7.value] as DatesRangeValue,
+							datesRangeValue: [today, next7.value] as DatesRangeValue<string>,
 						},
 					]
 				: []),

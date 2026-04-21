@@ -7,7 +7,7 @@ import {
 	TextInput,
 } from "@mantine/core";
 import { useCallback } from "react";
-import { useQueryExpenses } from "@/features/expense/core/app";
+import { useQueryExpensesInRange } from "@/features/expense/core/app";
 import { useRetry } from "@/shared/async-state";
 import { QueryError } from "@/shared/components";
 import { PlusIcon } from "@/shared/icons";
@@ -15,8 +15,19 @@ import { useGlobalModals } from "@/shared/modals/app";
 import { IModalType } from "@/shared/modals/domain";
 import { ExpensesTableContent } from "./ExpensesTableContent";
 
-export function ExpensesTable() {
-	const queryAllExpenses = useQueryExpenses().useQuery();
+export interface ExpensesTableProps {
+	start: number | null;
+	end: number | null;
+}
+
+export function ExpensesTable({ start, end }: ExpensesTableProps) {
+	const queryAllExpenses = useQueryExpensesInRange({
+		// biome-ignore lint/style/noNonNullAssertion: ⚠️ WARNING: Enforced through enabled field
+		start: start!,
+		// biome-ignore lint/style/noNonNullAssertion: ⚠️ WARNING: Enforced though enabled field
+		end: end!,
+		enabled: !!start && !!end,
+	}).useQuery();
 
 	const retry = useRetry(queryAllExpenses.refetch, queryAllExpenses.isLoading);
 
