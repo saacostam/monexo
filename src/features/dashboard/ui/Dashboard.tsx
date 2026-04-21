@@ -133,7 +133,10 @@ export function Dashboard() {
 					</MenuDropdown>
 				</Menu>
 			</Flex>
-			<ExpensesStats />
+			<ExpensesStats
+				start={dateRangeInMsSinceEpoch?.start ?? null}
+				end={dateRangeInMsSinceEpoch?.end ?? null}
+			/>
 			<Grid>
 				<GridCol span={{ base: 12, md: 8 }}>
 					<ExpensesTable
