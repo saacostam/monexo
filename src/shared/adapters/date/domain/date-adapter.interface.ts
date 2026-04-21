@@ -14,9 +14,21 @@ export interface IDateAdapter {
 	/**
 	 * Interprets YYYY-MM-DD as local start of day and converts to UTC ms.
 	 */
+
 	fromYyyyMmDdToUtcMsSinceEpoch(
 		date: string,
 	): { ok: true; value: number } | { ok: false; error: string };
+
+	/**
+	 * Adds time to a local YYYY-MM-DD date.
+	 * Input is interpreted in the client's local timezone.
+	 * Output is normalized to YYYY-MM-DD.
+	 */
+	plus(
+		date: string,
+		args?: { months?: number; weeks?: number; days?: number },
+	): { ok: true; value: string } | { ok: false; error: string };
+
 	/**
 	 * Returns today's date in the client's local timezone
 	 * formatted as YYYY-MM-DD.
@@ -24,4 +36,19 @@ export interface IDateAdapter {
 	 * No UTC conversion is applied.
 	 */
 	todayInYyyyMmDd(): string;
+	/**
+	 * Returns start of current week in the client's local timezone
+	 * formatted as YYYY-MM-DD.
+	 *
+	 * No UTC conversion is applied.
+	 */
+	startOfWeek(): string;
+
+	/**
+	 * Returns start of current month in the client's local timezone
+	 * formatted as YYYY-MM-DD.
+	 *
+	 * No UTC conversion is applied.
+	 */
+	startOfMonth(): string;
 }
