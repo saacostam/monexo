@@ -14,8 +14,9 @@ import {
 	Title,
 } from "@mantine/core";
 import { DatePickerInput, type DatesRangeValue } from "@mantine/dates";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 import { Link } from "react-router";
+import { useDatePresets } from "@/features/dashboard/app";
 import { ExpensesBreakdown } from "@/features/expense/breakdown/ui";
 import { ExpensesStats } from "@/features/expense/stats/ui";
 import { ExpensesTable } from "@/features/expense/table/ui";
@@ -30,86 +31,17 @@ import { useGlobalModals } from "@/shared/modals/app";
 import { IModalType } from "@/shared/modals/domain";
 import { genRoute, RouteName } from "@/shared/router/app";
 
-export interface IDatePreset {
-	id: string;
-	label: string;
-	datesRangeValue: DatesRangeValue;
-}
-
 export function Dashboard() {
 	const { date } = useAdapters();
 
 	const { set } = useGlobalModals();
 
-	const datePresets: IDatePreset[] = useMemo(() => {
-		const today = date.todayInYyyyMmDd();
-
-		const thisWeekStart = date.startOfWeek();
-		const thisMonthStart = date.startOfMonth();
-
-		const thisWeekEnd = date.plus(thisWeekStart, {
-			weeks: 1,
-			days: -1,
-		});
-
-		const thisMonthEnd = date.plus(thisMonthStart, {
-			months: 1,
-			days: -1,
-		});
-
-		const next7 = date.plus(today, {
-			weeks: 1,
-			days: -1,
-		});
-
-		const presets: IDatePreset[] = [
-			{
-				id: "today",
-				label: "Today",
-				datesRangeValue: [today, today],
-			},
-
-			...(thisWeekEnd.ok
-				? [
-						{
-							id: "this-week",
-							label: "This Week",
-							datesRangeValue: [
-								thisWeekStart,
-								thisWeekEnd.value,
-							] as DatesRangeValue,
-						},
-					]
-				: []),
-
-			...(thisMonthEnd.ok
-				? [
-						{
-							id: "this-month",
-							label: "This Month",
-							datesRangeValue: [
-								thisMonthStart,
-								thisMonthEnd.value,
-							] as DatesRangeValue,
-						},
-					]
-				: []),
-
-			...(next7.ok
-				? [
-						{
-							id: "next-7-days",
-							label: "Next 7 Days",
-							datesRangeValue: [today, next7.value] as DatesRangeValue,
-						},
-					]
-				: []),
-		];
-
-		return presets;
-	}, [date]);
+	const datePresets = useDatePresets();
 	const [dateRange, setDateRange] = useState<DatesRangeValue>(
-		datePresets[0].datesRangeValue,
+		datePresets.at(0)?.datesRangeValue ?? [
+			date.todayInYyyyMmDd(),
+			date.todayInYyyyMmDd(),
+		],
 	);
 
 	const onClickAddExpense = useCallback(() => {
