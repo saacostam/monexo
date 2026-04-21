@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Skeleton, Text, Title } from "@mantine/core";
+import { Box, Button, Flex, Text, Title } from "@mantine/core";
 import { useCallback } from "react";
 import { useQueryAllCategories } from "@/features/category/core/app";
 import { useRetry } from "@/shared/async-state";
@@ -7,6 +7,7 @@ import { PlusIcon } from "@/shared/icons";
 import { useGlobalModals } from "@/shared/modals/app";
 import { IModalType } from "@/shared/modals/domain";
 import { TableCategoriesContent } from "./TableCategoriesContent";
+import { TableCategoriesSkeleton } from "./TableCategoriesSkeleton";
 
 export function TableCategories() {
 	const { set } = useGlobalModals();
@@ -57,7 +58,7 @@ export function TableCategories() {
 			{queryAllCategories.isSuccess && (
 				<TableCategoriesContent categories={queryAllCategories.data} />
 			)}
-			{queryAllCategories.isLoading && <Skeleton h="256px" />}
+			{queryAllCategories.isLoading && <TableCategoriesSkeleton />}
 		</Flex>
 	);
 }
