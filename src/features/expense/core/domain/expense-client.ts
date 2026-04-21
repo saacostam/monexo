@@ -11,6 +11,9 @@ export interface IExpenseClient {
 		args: IExpenseClientPayload["RemoveRequest"],
 	): Promise<IExpenseClientPayload["RemoveResponse"]>;
 	getAll(): Promise<IExpenseClientPayload["GetAllResponse"]>;
+	getAllInRange(
+		args: IExpenseClientPayload["GetAllInRangeRequest"],
+	): Promise<IExpenseClientPayload["GetAllInRangeResponse"]>;
 	getById(
 		args: IExpenseClientPayload["GetByIdRequest"],
 	): Promise<IExpenseClientPayload["GetByIdResponse"]>;
@@ -47,6 +50,12 @@ export interface IExpenseClientPayload {
 	GetByIdResponse: IWithCategory<IExpense>;
 
 	GetAllResponse: IWithCategory<IExpense>[];
+
+	GetAllInRangeRequest: {
+		start: number;
+		end: number;
+	};
+	GetAllInRangeResponse: IWithCategory<IExpense>[];
 
 	UpdateRequest: {
 		id: string;

@@ -53,6 +53,20 @@ export function useExpenseClient({
 		return fetcher.get("/expense", z.array(expenseSchema));
 	}, [fetcher.get]);
 
+	const getAllInRange: IExpenseClient["getAllInRange"] = useCallback(
+		({ start, end }) => {
+			const queryParams = new URLSearchParams();
+			queryParams.append("start", String(start));
+			queryParams.append("end", String(end));
+
+			return fetcher.get(
+				`/expense/range?${queryParams.toString()}`,
+				z.array(expenseSchema),
+			);
+		},
+		[fetcher.get],
+	);
+
 	const getById: IExpenseClient["getById"] = useCallback(
 		({ id }) => {
 			return fetcher.get(`/expense/${id}`, expenseSchema);
@@ -84,10 +98,11 @@ export function useExpenseClient({
 		() => ({
 			create,
 			getAll,
+			getAllInRange,
 			getById,
 			remove,
 			update,
 		}),
-		[create, getAll, getById, remove, update],
+		[create, getAll, getAllInRange, getById, remove, update],
 	);
 }

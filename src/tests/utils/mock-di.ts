@@ -25,6 +25,7 @@ export function mockDi(overrides?: {
 		expense: {
 			create: vi.fn(),
 			getAll: vi.fn(),
+			getAllInRange: vi.fn(),
 			getById: vi.fn(),
 			remove: vi.fn(),
 			update: vi.fn(),
