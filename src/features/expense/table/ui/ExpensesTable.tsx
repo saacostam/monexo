@@ -1,11 +1,4 @@
-import {
-	Button,
-	Card,
-	Divider,
-	Flex,
-	Skeleton,
-	TextInput,
-} from "@mantine/core";
+import { Button, Card, Divider, Flex, TextInput } from "@mantine/core";
 import { useCallback } from "react";
 import { useQueryExpensesInRange } from "@/features/expense/core/app";
 import { useRetry } from "@/shared/async-state";
@@ -14,6 +7,7 @@ import { PlusIcon } from "@/shared/icons";
 import { useGlobalModals } from "@/shared/modals/app";
 import { IModalType } from "@/shared/modals/domain";
 import { ExpensesTableContent } from "./ExpensesTableContent";
+import { ExpensesTableSkeleton } from "./ExpensesTableSkeleton";
 
 export interface ExpensesTableProps {
 	start: number | null;
@@ -67,7 +61,7 @@ export function ExpensesTable({ start, end }: ExpensesTableProps) {
 			{queryAllExpenses.isSuccess && (
 				<ExpensesTableContent expenses={queryAllExpenses.data} />
 			)}
-			{queryAllExpenses.isLoading && <Skeleton h="256px" />}
+			{queryAllExpenses.isLoading && <ExpensesTableSkeleton />}
 		</Card>
 	);
 }
