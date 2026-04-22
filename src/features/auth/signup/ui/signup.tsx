@@ -22,10 +22,19 @@ import { Logo } from "@/shared/components";
 import { genRoute, RouteName } from "@/shared/router/app";
 import { FormUtils } from "@/shared/utils/form";
 
-const signUpSchema = z.object({
-	username: z.string().min(1, { message: "Username is required" }).max(48),
-	password: z.string().min(1, { message: "Password is required" }).max(48),
-});
+const signUpSchema = z
+	.object({
+		username: z.string().min(1, { message: "Username is required" }).max(48),
+		password: z.string().min(1, { message: "Password is required" }).max(48),
+		confirmPassword: z
+			.string()
+			.min(1, { message: "Confirm password is required" })
+			.max(48),
+	})
+	.refine((data) => data.password === data.confirmPassword, {
+		message: "Passwords do not match",
+		path: ["confirmPassword"],
+	});
 
 export function SignUp() {
 	const nav = useNavigate();
@@ -132,6 +141,14 @@ export function SignUp() {
 					placeholder="Password"
 					{...form.register("password")}
 					error={errors.password?.message}
+				/>
+				<Space h="md" />
+				<PasswordInput
+					size="sm"
+					label="Confirm Password"
+					placeholder="Confirm Password"
+					{...form.register("confirmPassword")}
+					error={errors.confirmPassword?.message}
 				/>
 				{rootErrorMessage && (
 					<>
