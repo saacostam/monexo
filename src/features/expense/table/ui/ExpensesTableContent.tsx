@@ -9,13 +9,18 @@ import {
 	TableTh,
 	TableThead,
 	TableTr,
+	Text,
 	Tooltip,
 } from "@mantine/core";
 import type { IExpense, IWithCategory } from "@/features/expense/core/domain";
 import { useAdapters } from "@/shared/adapters/core/app";
 import { IThemeVariant } from "@/shared/adapters/theme/domain";
 import { EmptyQuery } from "@/shared/components";
-import { PencilSquareIcon, TrashIcon } from "@/shared/icons";
+import {
+	InformationCircleIcon,
+	PencilSquareIcon,
+	TrashIcon,
+} from "@/shared/icons";
 import { useGlobalModals } from "@/shared/modals/app";
 import { IModalType } from "@/shared/modals/domain";
 
@@ -53,8 +58,8 @@ export function ExpensesTableContent({ expenses }: ExpensesTableContentProps) {
 				<TableTr>
 					<TableTh>Date</TableTh>
 					<TableTh>Name</TableTh>
-					<TableTh>Category</TableTh>
-					<TableTh visibleFrom="xs">Description</TableTh>
+					<TableTh visibleFrom="xs">Category</TableTh>
+					<TableTh style={{ textAlign: "end" }}>Amount</TableTh>
 					<TableTh style={{ textAlign: "end" }}>Actions</TableTh>
 				</TableTr>
 			</TableThead>
@@ -64,12 +69,26 @@ export function ExpensesTableContent({ expenses }: ExpensesTableContentProps) {
 						<TableTd>
 							{date.fromUtcMsSinceEpochToLocalYyyyMmDd(expense.date)}
 						</TableTd>
-						<TableTd>{expense.name}</TableTd>
 						<TableTd>
-							{expense.category ? <Badge>{expense.category.name}</Badge> : "-"}
+							<Flex align="center" direction="row" gap="0.25rem">
+								{expense.description && (
+									<Tooltip label={expense.description} flex="0">
+										<InformationCircleIcon height="1rem" width="1rem" />
+									</Tooltip>
+								)}
+								<Text component="span" inherit flex="1" miw="0">
+									{expense.name}
+								</Text>
+							</Flex>
 						</TableTd>
 						<TableTd visibleFrom="xs">
-							{expense.description ? expense.description : "-"}
+							{expense.category ? <Badge>{expense.category.name}</Badge> : "-"}
+						</TableTd>
+						<TableTd style={{ textAlign: "end" }}>
+							${" "}
+							{expense.amount !== undefined || expense.amount !== null
+								? expense.amount
+								: "-"}
 						</TableTd>
 						<TableTd style={{ textAlign: "end" }}>
 							<Actions
