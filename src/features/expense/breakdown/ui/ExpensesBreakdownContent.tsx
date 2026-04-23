@@ -74,7 +74,7 @@ export function ExpensesBreakdownContent({
 							<Text component="span" fw="bold" size="xs">
 								{name}
 							</Text>
-							{" • "}${value}
+							{" • "}$ {value}
 						</Text>
 					</Flex>
 				))}
