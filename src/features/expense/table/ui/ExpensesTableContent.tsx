@@ -50,7 +50,7 @@ export function ExpensesTableContent({ expenses }: ExpensesTableContentProps) {
 		<Table
 			striped
 			stripedColor={
-				themeAdapter.theme === IThemeVariant.LIGHT ? "gray.3" : "dark.7"
+				themeAdapter.theme === IThemeVariant.LIGHT ? "gray.1" : "dark.7"
 			}
 			withTableBorder
 		>

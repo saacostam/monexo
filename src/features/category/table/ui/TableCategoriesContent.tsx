@@ -16,6 +16,8 @@ import {
 } from "@mantine/core";
 import { useCallback, useMemo, useState } from "react";
 import type { ICategory } from "@/features/category/core/domain";
+import { useAdapters } from "@/shared/adapters/core/app";
+import { IThemeVariant } from "@/shared/adapters/theme/domain";
 import { EmptyQuery } from "@/shared/components";
 import { PencilSquareIcon, TrashIcon } from "@/shared/icons";
 import { useGlobalModals } from "@/shared/modals/app";
@@ -45,6 +47,8 @@ const FILTER_TYPES = [
 export function TableCategoriesContent({
 	categories,
 }: ManageCategoriesContentProps) {
+	const { themeAdapter } = useAdapters();
+
 	const { set } = useGlobalModals();
 
 	const [search, setSearch] = useState("");
@@ -119,7 +123,13 @@ export function TableCategoriesContent({
 				{filteredCategories.length === 0 ? (
 					<EmptyQuery title="No categories yet" />
 				) : (
-					<Table>
+					<Table
+						striped
+						stripedColor={
+							themeAdapter.theme === IThemeVariant.LIGHT ? "gray.1" : "dark.7"
+						}
+						withTableBorder
+					>
 						<TableThead>
 							<TableTr>
 								<TableTh>Name</TableTh>
