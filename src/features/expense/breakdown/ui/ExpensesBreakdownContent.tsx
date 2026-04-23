@@ -58,6 +58,7 @@ export function ExpensesBreakdownContent({
 			<Flex justify="center">
 				<PieChart
 					data={pieChartCells}
+					flex="1"
 					labelsPosition="outside"
 					labelsType="percent"
 					withLabels
