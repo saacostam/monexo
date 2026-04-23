@@ -10,6 +10,7 @@ import { AppLayout, LandingLayout } from "@/shared/layout/ui";
 import { genRoute, RouteName } from "@/shared/router/app";
 
 // Lazy imports
+const AnalyticsScreen = lazy(() => import("@/shared/screens/analytics-screen"));
 const CategoryScreen = lazy(() => import("@/shared/screens/category-screen"));
 const ErrorScreen = lazy(() => import("@/shared/screens/error-screen"));
 const HomeScreen = lazy(() => import("@/shared/screens/home-screen"));
@@ -38,6 +39,7 @@ export function Router({ Provider }: RouterProps) {
 						</Route>
 						<Route element={<AppLayout>{<Outlet />}</AppLayout>}>
 							<Route path="app" element={<HomeScreen />} />
+							<Route path="analytics" element={<AnalyticsScreen />} />
 							<Route path="category" element={<CategoryScreen />} />
 						</Route>
 					</Route>

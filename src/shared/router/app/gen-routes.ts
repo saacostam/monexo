@@ -5,6 +5,7 @@
  * decoupling navigation logic from hardcoded path strings.
  */
 export enum RouteName {
+	ANALYTICS = "Analytics",
 	CATEGORY = "Category",
 	HOME = "Home",
 	LOGIN = "Login",
@@ -29,6 +30,9 @@ export type GenerateRouteAction =
 	  }
 	| {
 			name: RouteName.SIGNUP;
+	  }
+	| {
+			name: RouteName.ANALYTICS;
 	  };
 
 /**
@@ -47,6 +51,9 @@ export type GenerateRouteAction =
  */
 export function genRoute(action: GenerateRouteAction): string {
 	switch (action.name) {
+		case RouteName.ANALYTICS: {
+			return "/analytics";
+		}
 		case RouteName.CATEGORY: {
 			return "/category";
 		}
