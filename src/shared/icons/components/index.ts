@@ -9,6 +9,7 @@ export * from "./chevron-up.icon";
 export * from "./cube-transparent.icon";
 export * from "./exclamation-circle.icon";
 export * from "./fire.icon";
+export * from "./information-circle.icon";
 export * from "./moon.icon";
 export * from "./pencil-square.icon";
 export * from "./plus.icon";
