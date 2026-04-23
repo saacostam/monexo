@@ -1,5 +1,4 @@
 export const theme = {
-	primaryColor: "green",
 	black: "#001a03",
 	components: {
 		Modal: {
@@ -11,4 +10,6 @@ export const theme = {
 			},
 		},
 	},
+	defaultRadius: "sm",
+	primaryColor: "green",
 };
