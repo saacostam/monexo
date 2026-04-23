@@ -1,23 +1,37 @@
-import { PieChart } from "@mantine/charts";
 import {
 	Button,
 	Card,
 	Divider,
 	Flex,
-	Indicator,
-	Text,
+	Skeleton,
 	ThemeIcon,
 	Title,
 } from "@mantine/core";
+import { useQueryExpensesInRange } from "@/features/expense/core/app";
+import { useRetry } from "@/shared/async-state";
+import { QueryError } from "@/shared/components";
 import { ArrowRightIcon, ChartBarIcon } from "@/shared/icons";
+import { ExpensesBreakdownContent } from "./ExpensesBreakdownContent";
 
-const CHART_DATA = [
-	{ name: "House" as const, value: 400, color: "indigo.6" },
-	{ name: "Fun" as const, value: 300, color: "yellow.6" },
-	{ name: "Food" as const, value: 300, color: "green.6" },
-];
+export interface ExpensesBreakdownProps {
+	start: number | null;
+	end: number | null;
+}
 
-export function ExpensesBreakdown() {
+export function ExpensesBreakdown({ start, end }: ExpensesBreakdownProps) {
+	const queryAllExpensesInCalendarRange = useQueryExpensesInRange({
+		// biome-ignore lint/style/noNonNullAssertion: ⚠️ WARNING: Enforced through enabled field
+		start: start!,
+		// biome-ignore lint/style/noNonNullAssertion: ⚠️ WARNING: Enforced though enabled field
+		end: end!,
+		enabled: !!start && !!end,
+	}).useQuery();
+
+	const retry = useRetry(
+		queryAllExpensesInCalendarRange.refetch,
+		queryAllExpensesInCalendarRange.isLoading,
+	);
+
 	return (
 		<Card h="100%" withBorder>
 			<Flex align="center" direction="row" gap="xs" wrap="wrap">
@@ -27,29 +41,20 @@ export function ExpensesBreakdown() {
 				<Title size="h4">Spending Breakdown</Title>
 			</Flex>
 			<Divider my="sm" />
-			<Flex justify="center">
-				<PieChart
-					data={CHART_DATA}
-					labelsPosition="outside"
-					labelsType="percent"
-					withLabels
-					withLabelsLine
-					withTooltip
+			{queryAllExpensesInCalendarRange.isLoading && <Skeleton h="256px" />}
+			{queryAllExpensesInCalendarRange.isError && (
+				<QueryError
+					msg="Unable to retrieve the spending information"
+					retry={retry}
+					error={queryAllExpensesInCalendarRange.error}
+					where="ExpensesBreakdown.queryAllExpensesInCalendarRange.isError"
 				/>
-			</Flex>
-			<Flex direction="column" gap="0.5rem" wrap="wrap">
-				{CHART_DATA.map(({ color, name, value }, i) => (
-					<Flex align="center" gap="xs" key={+i}>
-						<Indicator color={color} />
-						<Text size="xs">
-							<Text component="span" fw="bold" size="xs">
-								{name}
-							</Text>
-							{" • "}${value}
-						</Text>
-					</Flex>
-				))}
-			</Flex>
+			)}
+			{queryAllExpensesInCalendarRange.isSuccess && (
+				<ExpensesBreakdownContent
+					expenses={queryAllExpensesInCalendarRange.data}
+				/>
+			)}
 			<Divider my="md" />
 			<Button
 				rightSection={<ArrowRightIcon height="1.2rem" width="1.2rem" />}

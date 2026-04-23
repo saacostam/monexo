@@ -157,7 +157,10 @@ export function Dashboard() {
 								Manage Categories
 							</Button>
 						</Card>
-						<ExpensesBreakdown />
+						<ExpensesBreakdown
+							start={dateRangeInMsSinceEpoch?.start ?? null}
+							end={dateRangeInMsSinceEpoch?.end ?? null}
+						/>
 					</Flex>
 				</GridCol>
 			</Grid>
