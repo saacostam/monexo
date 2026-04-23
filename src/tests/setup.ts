@@ -42,3 +42,13 @@ global.ResizeObserver = class {
 window.HTMLElement.prototype.scrollIntoView = () => {
 	/* empty */
 };
+
+// @ts-expect-error: mock
+document.fonts = {
+	addEventListener: () => {
+		/* empty */
+	},
+	removeEventListener: () => {
+		/* empty */
+	},
+};

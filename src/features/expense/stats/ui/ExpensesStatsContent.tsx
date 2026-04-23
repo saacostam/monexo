@@ -39,7 +39,7 @@ export function ExpensesStatsContent({
 	}, [expensesInToday]);
 
 	return (
-		<Grid gutter="md">
+		<Grid gap="md">
 			<GridCol span={{ base: 12, sm: 6 }}>
 				<Card withBorder>
 					<Flex align="center" direction="row" gap="sm">
