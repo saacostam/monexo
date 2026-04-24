@@ -1,7 +1,8 @@
 import { PieChart, type PieChartCell } from "@mantine/charts";
-import { Flex, Indicator, Text } from "@mantine/core";
+import { Flex, Indicator, Paper, Text } from "@mantine/core";
 import { useMemo } from "react";
 import type { IExpense, IWithCategory } from "@/features/expense/core/domain";
+import { EmptyQuery } from "@/shared/components";
 
 export interface ExpensesBreakdownContentProps {
 	expenses: IWithCategory<IExpense>[];
@@ -52,6 +53,16 @@ export function ExpensesBreakdownContent({
 			return cells;
 		}, []);
 	}, [expenses]);
+
+	if (pieChartCells.length === 0)
+		return (
+			<Paper bg="transparent" p="md" withBorder>
+				<EmptyQuery
+					title="No data found"
+					description="Try selecting a different date range or adding a new expense."
+				/>
+			</Paper>
+		);
 
 	return (
 		<>
