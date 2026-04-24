@@ -59,7 +59,7 @@ export function ExpensesBreakdownContent({
 			<Paper bg="transparent" p="md" withBorder>
 				<EmptyQuery
 					title="No data found"
-					description="Try selecting a different date range or adding a new expense."
+					description="Try selecting a different date range or adding a new expense"
 				/>
 			</Paper>
 		);
