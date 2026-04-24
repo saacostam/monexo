@@ -5,6 +5,7 @@ import {
 	MenuItem,
 	MenuLabel,
 	MenuTarget,
+	Skeleton,
 	UnstyledButton,
 } from "@mantine/core";
 import { useCallback } from "react";
@@ -26,9 +27,15 @@ export function UserMenu() {
 		<Menu withArrow>
 			<MenuTarget>
 				<UnstyledButton>
-					<Avatar color="green">
-						{user.isSuccess && user.data.username.slice(0, 2).toUpperCase()}
-					</Avatar>
+					{user.isSuccess ? (
+						<Avatar color="green">
+							{user.data.username.slice(0, 2).toUpperCase()}
+						</Avatar>
+					) : user.isError ? (
+						<Avatar color="green" />
+					) : (
+						<Skeleton bdrs="100%" height="2.4rem" width="2.4rem" />
+					)}
 				</UnstyledButton>
 			</MenuTarget>
 
