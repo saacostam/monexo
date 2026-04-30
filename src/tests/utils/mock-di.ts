@@ -48,6 +48,7 @@ export function mockDi(overrides?: {
 		date: {
 			fromUtcMsSinceEpochToLocalYyyyMmDd: vi.fn(),
 			fromYyyyMmDdToUtcMsSinceEpoch: vi.fn(),
+			isValidYyyyMmDd: vi.fn(),
 			plus: vi.fn(),
 			startOfMonth: vi.fn(),
 			startOfWeek: vi.fn(),

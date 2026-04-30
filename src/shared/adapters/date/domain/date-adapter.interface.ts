@@ -20,6 +20,15 @@ export interface IDateAdapter {
 	): { ok: true; value: number } | { ok: false; error: string };
 
 	/**
+	 * Validates that a string is a real calendar date in YYYY-MM-DD format.
+	 *
+	 * - Must match ISO date shape
+	 * - Must represent a valid calendar date (e.g. rejects 2024-02-31)
+	 * - Interpreted in local timezone
+	 */
+	isValidYyyyMmDd(date: string): boolean;
+
+	/**
 	 * Adds time to a local YYYY-MM-DD date.
 	 * Input is interpreted in the client's local timezone.
 	 * Output is normalized to YYYY-MM-DD.
