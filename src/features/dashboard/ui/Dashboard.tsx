@@ -13,10 +13,13 @@ import {
 	Text,
 	Title,
 } from "@mantine/core";
-import { DatePickerInput, type DatesRangeValue } from "@mantine/dates";
-import { useCallback, useMemo, useState } from "react";
+import { DatePickerInput } from "@mantine/dates";
+import { useCallback, useMemo } from "react";
 import { Link } from "react-router";
-import { useDatePresets } from "@/features/dashboard/app";
+import {
+	useDatePresets,
+	useDateRangeQueryState,
+} from "@/features/dashboard/app";
 import { ExpensesBreakdown } from "@/features/expense/breakdown/ui";
 import { ExpensesStats } from "@/features/expense/stats/ui";
 import { ExpensesTable } from "@/features/expense/table/ui";
@@ -37,12 +40,9 @@ export function Dashboard() {
 	const { set } = useGlobalModals();
 
 	const datePresets = useDatePresets();
-	const [dateRange, setDateRange] = useState<DatesRangeValue<string>>(
-		datePresets.at(0)?.datesRangeValue ?? [
-			date.todayInYyyyMmDd(),
-			date.todayInYyyyMmDd(),
-		],
-	);
+
+	const { dateRange, setDateRange } = useDateRangeQueryState();
+
 	const dateRangeInMsSinceEpoch = useMemo(() => {
 		// enforce: both must exist
 		const [startStr, endStr] = dateRange;
