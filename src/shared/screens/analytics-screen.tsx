@@ -1,20 +1,19 @@
-import {
-	Anchor,
-	Box,
-	Breadcrumbs,
-	Flex,
-	Skeleton,
-	Text,
-	Title,
-} from "@mantine/core";
+import { Anchor, Box, Breadcrumbs, Flex, Text, Title } from "@mantine/core";
 import { Link } from "react-router";
+import { useDateRangeSearchParams } from "@/features/date/app";
+import { Analysis } from "@/features/expense/analysis/ui";
 import { genRoute, RouteName } from "@/shared/router/app";
 
 export default function AnalyticsScreen() {
+	const { dateRange, setDateRange } = useDateRangeSearchParams();
+
 	return (
 		<Flex direction="column" gap="lg">
 			<Breadcrumbs>
-				<Anchor component={Link} to={genRoute({ name: RouteName.HOME })}>
+				<Anchor
+					component={Link}
+					to={genRoute({ name: RouteName.HOME, payload: { range: dateRange } })}
+				>
 					Dashboard
 				</Anchor>
 				<Text c="green">Analytics</Text>
@@ -25,7 +24,7 @@ export default function AnalyticsScreen() {
 					Select a date range to explore.
 				</Text>
 			</Box>
-			<Skeleton h="256px" />
+			<Analysis dateRange={dateRange} setDateRange={setDateRange} />
 		</Flex>
 	);
 }

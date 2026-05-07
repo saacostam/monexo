@@ -64,7 +64,10 @@ export function ExpensesBreakdown({ dateRange }: ExpensesBreakdownProps) {
 				component={Link}
 				rightSection={<ArrowRightIcon height="1.2rem" width="1.2rem" />}
 				size="md"
-				to={genRoute({ name: RouteName.ANALYTICS })}
+				to={genRoute({
+					name: RouteName.ANALYTICS,
+					payload: { range: dateRange },
+				})}
 			>
 				More Analytics
 			</Button>

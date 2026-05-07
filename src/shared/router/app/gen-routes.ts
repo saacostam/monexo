@@ -1,3 +1,5 @@
+import type { DatesRangeValue } from "@mantine/dates";
+
 /**
  * Represents all valid application route identifiers.
  *
@@ -20,19 +22,25 @@ export enum RouteName {
  */
 export type GenerateRouteAction =
 	| {
+			name: RouteName.ANALYTICS;
+			payload?: {
+				range?: DatesRangeValue<string>;
+			};
+	  }
+	| {
 			name: RouteName.CATEGORY;
+	  }
+	| {
+			name: RouteName.HOME;
+			payload?: {
+				range?: DatesRangeValue<string>;
+			};
 	  }
 	| {
 			name: RouteName.LOGIN;
 	  }
 	| {
-			name: RouteName.HOME;
-	  }
-	| {
 			name: RouteName.SIGNUP;
-	  }
-	| {
-			name: RouteName.ANALYTICS;
 	  };
 
 /**
@@ -52,13 +60,25 @@ export type GenerateRouteAction =
 export function genRoute(action: GenerateRouteAction): string {
 	switch (action.name) {
 		case RouteName.ANALYTICS: {
-			return "/analytics";
+			const searchParams = new URLSearchParams();
+
+			if (action.payload?.range) {
+				searchParams.append("range", formatDateRange(action.payload.range));
+			}
+
+			return `/analytics${searchParams.size > 0 ? `?${searchParams.toString()}` : ""}`;
 		}
 		case RouteName.CATEGORY: {
 			return "/category";
 		}
 		case RouteName.HOME: {
-			return "/app";
+			const searchParams = new URLSearchParams();
+
+			if (action.payload?.range) {
+				searchParams.append("range", formatDateRange(action.payload.range));
+			}
+
+			return `/app${searchParams.size > 0 ? `?${searchParams.toString()}` : ""}`;
 		}
 		case RouteName.LOGIN: {
 			return "/";
@@ -67,4 +87,8 @@ export function genRoute(action: GenerateRouteAction): string {
 			return "/signup";
 		}
 	}
+}
+
+function formatDateRange(range: DatesRangeValue<string>): string {
+	return range.join("_");
 }
