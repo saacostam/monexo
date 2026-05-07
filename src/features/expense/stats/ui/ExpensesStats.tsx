@@ -1,16 +1,19 @@
 import { Skeleton } from "@mantine/core";
+import type { DatesRangeValue } from "@mantine/dates";
 import { useMemo } from "react";
+import { useDateRangeToMs } from "@/features/date/app";
 import { useQueryExpensesInRange } from "@/features/expense/core/app";
 import { useAdapters } from "@/shared/adapters/core/app";
 import { ExpensesStatsContent } from "./ExpensesStatsContent";
 
 export interface ExpensesStatsProps {
-	start: number | null;
-	end: number | null;
+	dateRange: DatesRangeValue<string>;
 }
 
-export function ExpensesStats({ start, end }: ExpensesStatsProps) {
+export function ExpensesStats({ dateRange }: ExpensesStatsProps) {
 	const { date } = useAdapters();
+
+	const range = useDateRangeToMs({ dateRange });
 
 	const todayCalendarRange = useMemo(() => {
 		const startOfToday = date.todayInYyyyMmDd();
@@ -32,11 +35,10 @@ export function ExpensesStats({ start, end }: ExpensesStatsProps) {
 	}, [date.fromYyyyMmDdToUtcMsSinceEpoch, date.plus, date.todayInYyyyMmDd]);
 
 	const queryAllExpensesInCalendarRange = useQueryExpensesInRange({
-		// biome-ignore lint/style/noNonNullAssertion: ⚠️ WARNING: Enforced through enabled field
-		start: start!,
-		// biome-ignore lint/style/noNonNullAssertion: ⚠️ WARNING: Enforced though enabled field
-		end: end!,
-		enabled: !!start && !!end,
+		// ⚠️ WARNING: Enforced though enabled field
+		start: range?.start ?? 0,
+		end: range?.end || 0,
+		enabled: !!range?.start && !!range.end,
 	}).useQuery();
 
 	const queryAllExpensesToday = useQueryExpensesInRange({

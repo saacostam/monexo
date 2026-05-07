@@ -7,7 +7,9 @@ import {
 	ThemeIcon,
 	Title,
 } from "@mantine/core";
+import type { DatesRangeValue } from "@mantine/dates";
 import { Link } from "react-router";
+import { useDateRangeToMs } from "@/features/date/app";
 import { useQueryExpensesInRange } from "@/features/expense/core/app";
 import { useRetry } from "@/shared/async-state";
 import { QueryError } from "@/shared/components";
@@ -16,17 +18,17 @@ import { genRoute, RouteName } from "@/shared/router/app";
 import { ExpensesBreakdownContent } from "./ExpensesBreakdownContent";
 
 export interface ExpensesBreakdownProps {
-	start: number | null;
-	end: number | null;
+	dateRange: DatesRangeValue<string>;
 }
 
-export function ExpensesBreakdown({ start, end }: ExpensesBreakdownProps) {
+export function ExpensesBreakdown({ dateRange }: ExpensesBreakdownProps) {
+	const range = useDateRangeToMs({ dateRange });
+
 	const queryAllExpensesInCalendarRange = useQueryExpensesInRange({
-		// biome-ignore lint/style/noNonNullAssertion: ⚠️ WARNING: Enforced through enabled field
-		start: start!,
-		// biome-ignore lint/style/noNonNullAssertion: ⚠️ WARNING: Enforced though enabled field
-		end: end!,
-		enabled: !!start && !!end,
+		// ⚠️ WARNING: Enforced though enabled field
+		start: range?.start ?? 0,
+		end: range?.end || 0,
+		enabled: !!range?.start && !!range.end,
 	}).useQuery();
 
 	const retry = useRetry(

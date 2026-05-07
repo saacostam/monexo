@@ -1,5 +1,7 @@
 import { Button, Card, Divider, Flex, TextInput } from "@mantine/core";
+import type { DatesRangeValue } from "@mantine/dates";
 import { useCallback } from "react";
+import { useDateRangeToMs } from "@/features/date/app";
 import { useQueryExpensesInRange } from "@/features/expense/core/app";
 import { useRetry } from "@/shared/async-state";
 import { QueryError } from "@/shared/components";
@@ -10,17 +12,17 @@ import { ExpensesTableContent } from "./ExpensesTableContent";
 import { ExpensesTableSkeleton } from "./ExpensesTableSkeleton";
 
 export interface ExpensesTableProps {
-	start: number | null;
-	end: number | null;
+	dateRange: DatesRangeValue<string>;
 }
 
-export function ExpensesTable({ start, end }: ExpensesTableProps) {
+export function ExpensesTable({ dateRange }: ExpensesTableProps) {
+	const range = useDateRangeToMs({ dateRange });
+
 	const queryAllExpenses = useQueryExpensesInRange({
-		// biome-ignore lint/style/noNonNullAssertion: ⚠️ WARNING: Enforced through enabled field
-		start: start!,
-		// biome-ignore lint/style/noNonNullAssertion: ⚠️ WARNING: Enforced though enabled field
-		end: end!,
-		enabled: !!start && !!end,
+		// ⚠️ WARNING: Enforced though enabled field
+		start: range?.start ?? 0,
+		end: range?.end || 0,
+		enabled: !!range?.start && !!range.end,
 	}).useQuery();
 
 	const retry = useRetry(queryAllExpenses.refetch, queryAllExpenses.isLoading);
