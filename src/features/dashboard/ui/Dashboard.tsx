@@ -10,7 +10,7 @@ import {
 } from "@mantine/core";
 import { useCallback } from "react";
 import { Link } from "react-router";
-import { useDateRangeQueryState } from "@/features/dashboard/app";
+import { useDateRangeQueryState } from "@/features/date/app";
 import { DateRangeInput } from "@/features/date/ui";
 import { ExpensesBreakdown } from "@/features/expense/breakdown/ui";
 import { ExpensesStats } from "@/features/expense/stats/ui";

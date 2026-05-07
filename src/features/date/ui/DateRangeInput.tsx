@@ -8,7 +8,7 @@ import {
 	MenuTarget,
 } from "@mantine/core";
 import { DatePickerInput, type DatesRangeValue } from "@mantine/dates";
-import { useDatePresets } from "@/features/dashboard/app";
+import { useDatePresets } from "@/features/date/app";
 import { CalendarDateRangeIcon, ChevronDownIcon } from "@/shared/icons";
 
 export interface DateRangeInputProps {
