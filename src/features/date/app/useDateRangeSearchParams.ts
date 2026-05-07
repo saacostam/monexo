@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useAdapters } from "@/shared/adapters/core/app";
 
-export function useDateRangeQueryState() {
+export function useDateRangeSearchParams() {
 	const { date } = useAdapters();
 	const [searchParams, setSearchParams] = useSearchParams();
 
