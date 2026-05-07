@@ -8,9 +8,9 @@ import {
 	Text,
 	Title,
 } from "@mantine/core";
+import type { DatesRangeValue } from "@mantine/dates";
 import { useCallback } from "react";
 import { Link } from "react-router";
-import { useDateRangeQueryState } from "@/features/date/app";
 import { DateRangeInput } from "@/features/date/ui";
 import { ExpensesBreakdown } from "@/features/expense/breakdown/ui";
 import { ExpensesStats } from "@/features/expense/stats/ui";
@@ -20,10 +20,13 @@ import { useGlobalModals } from "@/shared/modals/app";
 import { IModalType } from "@/shared/modals/domain";
 import { genRoute, RouteName } from "@/shared/router/app";
 
-export function Dashboard() {
-	const { set } = useGlobalModals();
+export interface DashboardProps {
+	dateRange: DatesRangeValue<string>;
+	setDateRange: (next: DatesRangeValue<string>) => void;
+}
 
-	const { dateRange, setDateRange } = useDateRangeQueryState();
+export function Dashboard({ dateRange, setDateRange }: DashboardProps) {
+	const { set } = useGlobalModals();
 
 	const onClickAddExpense = useCallback(() => {
 		set({
