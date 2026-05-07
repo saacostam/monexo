@@ -5,31 +5,18 @@ import {
 	Flex,
 	Grid,
 	GridCol,
-	Menu,
-	MenuDropdown,
-	MenuItem,
-	MenuLabel,
-	MenuTarget,
 	Text,
 	Title,
 } from "@mantine/core";
-import { DatePickerInput } from "@mantine/dates";
 import { useCallback, useMemo } from "react";
 import { Link } from "react-router";
-import {
-	useDatePresets,
-	useDateRangeQueryState,
-} from "@/features/dashboard/app";
+import { useDateRangeQueryState } from "@/features/dashboard/app";
+import { DateRangeInput } from "@/features/date/ui";
 import { ExpensesBreakdown } from "@/features/expense/breakdown/ui";
 import { ExpensesStats } from "@/features/expense/stats/ui";
 import { ExpensesTable } from "@/features/expense/table/ui";
 import { useAdapters } from "@/shared/adapters/core/app";
-import {
-	CalendarDateRangeIcon,
-	ChevronDownIcon,
-	PlusIcon,
-	TagIcon,
-} from "@/shared/icons";
+import { PlusIcon, TagIcon } from "@/shared/icons";
 import { useGlobalModals } from "@/shared/modals/app";
 import { IModalType } from "@/shared/modals/domain";
 import { genRoute, RouteName } from "@/shared/router/app";
@@ -38,8 +25,6 @@ export function Dashboard() {
 	const { date } = useAdapters();
 
 	const { set } = useGlobalModals();
-
-	const datePresets = useDatePresets();
 
 	const { dateRange, setDateRange } = useDateRangeQueryState();
 
@@ -95,44 +80,7 @@ export function Dashboard() {
 					Add Expense
 				</Button>
 			</Flex>
-			<Flex align="center" direction="row" gap="md" wrap="wrap" justify="end">
-				<DatePickerInput
-					allowSingleDateInRange
-					leftSection={<CalendarDateRangeIcon height="1.5rem" width="1.5rem" />}
-					onChange={setDateRange}
-					placeholder="Date"
-					size="md"
-					flex="1"
-					miw="256"
-					type="range"
-					value={dateRange}
-				/>
-				<Menu position="bottom-end" withArrow>
-					<MenuTarget>
-						<Button
-							rightSection={<ChevronDownIcon height="1rem" width="1rem" />}
-							size="md"
-							variant="light"
-							fz="sm"
-						>
-							Quick Select
-						</Button>
-					</MenuTarget>
-					<MenuDropdown>
-						<MenuLabel>
-							<Flex direction="row" gap="sm">
-								<CalendarDateRangeIcon height="0.9rem" width="0.9rem" />
-								Date Presets
-							</Flex>
-						</MenuLabel>
-						{datePresets.map(({ id, datesRangeValue, label }) => (
-							<MenuItem key={id} onClick={() => setDateRange(datesRangeValue)}>
-								{label}
-							</MenuItem>
-						))}
-					</MenuDropdown>
-				</Menu>
-			</Flex>
+			<DateRangeInput dateRange={dateRange} setDateRange={setDateRange} />
 			<ExpensesStats
 				start={dateRangeInMsSinceEpoch?.start ?? null}
 				end={dateRangeInMsSinceEpoch?.end ?? null}
