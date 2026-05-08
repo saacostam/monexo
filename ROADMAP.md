@@ -1,3 +1,7 @@
+# Roadmap
+
+## Items before initial release
+
 - [ ] Add error logging and inline form errors for:
     - [ ] Create Category
     - [ ] Delete Category
@@ -8,5 +12,5 @@
     - [ ] Update Category
     - [ ] Delete Category
     - [ ] Create Expense
-- [ ] TableCategories - Match skeleton to content
-- [ ] ExpensesTable - Match skeleton to content
+- [x] TableCategories - Match skeleton to content
+- [x] ExpensesTable - Match skeleton to content
