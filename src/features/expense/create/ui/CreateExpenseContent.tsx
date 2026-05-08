@@ -44,7 +44,7 @@ export function CreateExpenseContent({
 				return notificationAdapter.notify({
 					type: "error",
 					title: "Error",
-					msg: `Unnable to create because of invalid date. Reason: ${dateValue.error}`,
+					msg: `Unable to create because of invalid date. Reason: ${dateValue.error}`,
 				});
 			}
 
