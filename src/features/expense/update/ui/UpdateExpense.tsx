@@ -1,8 +1,8 @@
-import { Skeleton } from "@mantine/core";
 import { useCallback } from "react";
 import { useQueryAllCategories } from "@/features/category/core/app";
 import { useQueryExpenseById } from "@/features/expense/core/app";
 import type { IExpenseClientPayload } from "@/features/expense/core/domain";
+import { ExpenseFormSkeleton } from "@/features/expense/expense-form/ui";
 import { useRetry } from "@/shared/async-state";
 import { QueryError } from "@/shared/components";
 import { UpdateExpenseContent } from "./UpdateExpenseContent";
@@ -60,5 +60,5 @@ export function UpdateExpense({
 		);
 	}
 
-	return <Skeleton h="128px" />;
+	return <ExpenseFormSkeleton />;
 }

@@ -1,6 +1,6 @@
-import { Skeleton } from "@mantine/core";
 import { useQueryAllCategories } from "@/features/category/core/app";
 import type { IExpenseClientPayload } from "@/features/expense/core/domain";
+import { ExpenseFormSkeleton } from "@/features/expense/expense-form/ui";
 import { useRetry } from "@/shared/async-state";
 import { QueryError } from "@/shared/components";
 import { CreateExpenseContent } from "./CreateExpenseContent";
@@ -43,5 +43,5 @@ export function CreateExpense({
 			/>
 		);
 
-	return <Skeleton h="128px" />;
+	return <ExpenseFormSkeleton />;
 }

@@ -14,3 +14,5 @@
     - [ ] Create Expense
 - [x] TableCategories - Match skeleton to content
 - [x] ExpensesTable - Match skeleton to content
+- [x] Create Expense - Match skeleton to content
+- [x] Update Expense - Match skeleton to content
