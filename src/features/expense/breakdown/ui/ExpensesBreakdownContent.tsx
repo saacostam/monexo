@@ -1,5 +1,5 @@
 import { PieChart, type PieChartCell } from "@mantine/charts";
-import { Flex, Indicator, Paper, Text } from "@mantine/core";
+import { Box, Flex, Paper, Text } from "@mantine/core";
 import { useMemo } from "react";
 import type { IExpense, IWithCategory } from "@/features/expense/core/domain";
 import { EmptyQuery } from "@/shared/components";
@@ -80,7 +80,7 @@ export function ExpensesBreakdownContent({
 			<Flex direction="column" gap="0.5rem" wrap="wrap">
 				{pieChartCells.map(({ color, name, value }, i) => (
 					<Flex align="center" gap="xs" key={+i}>
-						<Indicator color={color} />
+						<Box bdrs="100%" bg={color} h="0.5rem" w="0.5rem" />
 						<Text size="xs">
 							<Text component="span" fw="bold" size="xs">
 								{name}
