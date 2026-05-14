@@ -2,10 +2,12 @@ import {
 	Box,
 	Button,
 	Card,
+	Divider,
 	Flex,
 	Grid,
 	GridCol,
 	Text,
+	ThemeIcon,
 	Title,
 } from "@mantine/core";
 import type { DatesRangeValue } from "@mantine/dates";
@@ -15,7 +17,12 @@ import { DateRangeInput } from "@/features/date/ui";
 import { ExpensesBreakdown } from "@/features/expense/breakdown/ui";
 import { ExpensesStats } from "@/features/expense/stats/ui";
 import { ExpensesTable } from "@/features/expense/table/ui";
-import { PlusIcon, TagIcon } from "@/shared/icons";
+import {
+	ArrowRightIcon,
+	ChartBarIcon,
+	PlusIcon,
+	TagIcon,
+} from "@/shared/icons";
 import { useGlobalModals } from "@/shared/modals/app";
 import { IModalType } from "@/shared/modals/domain";
 import { genRoute, RouteName } from "@/shared/router/app";
@@ -76,7 +83,28 @@ export function Dashboard({ dateRange, setDateRange }: DashboardProps) {
 								Manage Categories
 							</Button>
 						</Card>
-						<ExpensesBreakdown dateRange={dateRange} />
+						<Card h="100%" withBorder>
+							<Flex align="center" direction="row" gap="xs" wrap="wrap">
+								<ThemeIcon bdrs="100%" p="0.25rem">
+									<ChartBarIcon />
+								</ThemeIcon>
+								<Title size="h4">Spending Breakdown</Title>
+							</Flex>
+							<Divider my="sm" />
+							<ExpensesBreakdown dateRange={dateRange} />
+							<Divider my="md" />
+							<Button
+								component={Link}
+								rightSection={<ArrowRightIcon height="1.2rem" width="1.2rem" />}
+								size="md"
+								to={genRoute({
+									name: RouteName.ANALYTICS,
+									payload: { range: dateRange },
+								})}
+							>
+								More Analytics
+							</Button>
+						</Card>
 					</Flex>
 				</GridCol>
 			</Grid>
