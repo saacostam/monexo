@@ -105,7 +105,7 @@ export function CategoriesStatsContent({
 						<TableTd>
 							<Badge color={row.color}>{row.name}</Badge>
 						</TableTd>
-						<TableTd style={{ textAlign: "end" }}>
+						<TableTd style={{ textAlign: "end" }} visibleFrom="xs">
 							{row.transactionCount.toFixed(2)}
 						</TableTd>
 						<TableTd style={{ textAlign: "end" }}>
