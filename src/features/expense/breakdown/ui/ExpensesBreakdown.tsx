@@ -25,22 +25,22 @@ export function ExpensesBreakdown({ dateRange }: ExpensesBreakdownProps) {
 		queryAllExpensesInCalendarRange.isLoading,
 	);
 
-	return (
-		<>
-			{queryAllExpensesInCalendarRange.isLoading && <Skeleton h="256px" />}
-			{queryAllExpensesInCalendarRange.isError && (
-				<QueryError
-					msg="Unable to retrieve the spending information"
-					retry={retry}
-					error={queryAllExpensesInCalendarRange.error}
-					where="ExpensesBreakdown.queryAllExpensesInCalendarRange.isError"
-				/>
-			)}
-			{queryAllExpensesInCalendarRange.isSuccess && (
-				<ExpensesBreakdownContent
-					expenses={queryAllExpensesInCalendarRange.data}
-				/>
-			)}
-		</>
-	);
+	if (queryAllExpensesInCalendarRange.isError)
+		return (
+			<QueryError
+				msg="Unable to retrieve the spending information"
+				retry={retry}
+				error={queryAllExpensesInCalendarRange.error}
+				where="ExpensesBreakdown.queryAllExpensesInCalendarRange.isError"
+			/>
+		);
+
+	if (queryAllExpensesInCalendarRange.isSuccess)
+		return (
+			<ExpensesBreakdownContent
+				expenses={queryAllExpensesInCalendarRange.data}
+			/>
+		);
+
+	return <Skeleton h="256px" />;
 }
