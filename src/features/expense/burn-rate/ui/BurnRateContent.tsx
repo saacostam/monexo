@@ -42,7 +42,7 @@ export function BurnRateContent({ expenses }: BurnRateContentProps) {
 
 			result.push({
 				label: currentDay,
-				value: runningTotal, // This is the 'Burn Rate' (Cumulative)
+				Cumulative: runningTotal.toFixed(2), // This is the 'Burn Rate' (Cumulative)
 			});
 
 			// 4. Increment the day using your adapter
@@ -76,7 +76,7 @@ export function BurnRateContent({ expenses }: BurnRateContentProps) {
 				h={300}
 				series={[
 					{
-						name: "value",
+						name: "Cumulative",
 						color: "indigo.6",
 					},
 				]}

@@ -87,7 +87,7 @@ export function ExpensesTableContent({ expenses }: ExpensesTableContentProps) {
 						<TableTd style={{ textAlign: "end" }}>
 							${" "}
 							{expense.amount !== undefined || expense.amount !== null
-								? expense.amount
+								? expense.amount.toFixed(2)
 								: "-"}
 						</TableTd>
 						<TableTd style={{ textAlign: "end" }}>
