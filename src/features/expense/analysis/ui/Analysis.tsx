@@ -2,6 +2,7 @@ import { Card, Divider, Flex, Grid, ThemeIcon, Title } from "@mantine/core";
 import type { DatesRangeValue } from "@mantine/dates";
 import { DateRangeInput } from "@/features/date/ui";
 import { ExpensesBreakdown } from "@/features/expense/breakdown/ui";
+import { BurnRate } from "@/features/expense/burn-rate/ui";
 import { ChartBarIcon } from "@/shared/icons";
 
 export interface AnalysisProps {
@@ -24,6 +25,18 @@ export function Analysis({ dateRange, setDateRange }: AnalysisProps) {
 						</Flex>
 						<Divider my="sm" />
 						<ExpensesBreakdown dateRange={dateRange} />
+					</Card>
+				</Grid.Col>
+				<Grid.Col span={{ base: 12, sm: 6 }}>
+					<Card h="100%" withBorder>
+						<Flex align="center" direction="row" gap="xs" wrap="wrap">
+							<ThemeIcon bdrs="100%" p="0.25rem">
+								<ChartBarIcon />
+							</ThemeIcon>
+							<Title size="h4">Burn Rate (Cumulative)</Title>
+						</Flex>
+						<Divider my="sm" />
+						<BurnRate dateRange={dateRange} />
 					</Card>
 				</Grid.Col>
 			</Grid>
