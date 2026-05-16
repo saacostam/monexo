@@ -13,9 +13,15 @@ import { ExpensesTableSkeleton } from "./ExpensesTableSkeleton";
 
 export interface ExpensesTableProps {
 	dateRange: DatesRangeValue<string>;
+	search: string;
+	setSearch: (search: string) => void;
 }
 
-export function ExpensesTable({ dateRange }: ExpensesTableProps) {
+export function ExpensesTable({
+	dateRange,
+	search,
+	setSearch,
+}: ExpensesTableProps) {
 	const range = useDateRangeToMs({ dateRange });
 
 	const queryAllExpenses = useQueryExpensesInRange({
@@ -40,8 +46,10 @@ export function ExpensesTable({ dateRange }: ExpensesTableProps) {
 			<Flex direction={{ base: "column", sm: "row" }} gap="md" wrap="wrap">
 				<TextInput
 					disabled={!queryAllExpenses.isSuccess}
+					onChange={(e) => setSearch(e.target.value)}
 					placeholder="Search..."
 					style={{ flex: 1 }}
+					value={search}
 				/>
 				<Button
 					leftSection={<PlusIcon height="1.2rem" width="1.2rem" />}
@@ -61,7 +69,11 @@ export function ExpensesTable({ dateRange }: ExpensesTableProps) {
 				/>
 			)}
 			{queryAllExpenses.isSuccess && (
-				<ExpensesTableContent expenses={queryAllExpenses.data} />
+				<ExpensesTableContent
+					expenses={queryAllExpenses.data}
+					search={search}
+					setSearch={setSearch}
+				/>
 			)}
 			{queryAllExpenses.isLoading && <ExpensesTableSkeleton />}
 		</Card>

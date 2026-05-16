@@ -30,9 +30,16 @@ import { genRoute, RouteName } from "@/shared/router/app";
 export interface DashboardProps {
 	dateRange: DatesRangeValue<string>;
 	setDateRange: (next: DatesRangeValue<string>) => void;
+	search: string;
+	setSearch: (search: string) => void;
 }
 
-export function Dashboard({ dateRange, setDateRange }: DashboardProps) {
+export function Dashboard({
+	dateRange,
+	setDateRange,
+	search,
+	setSearch,
+}: DashboardProps) {
 	const { set } = useGlobalModals();
 
 	const onClickAddExpense = useCallback(() => {
@@ -68,7 +75,11 @@ export function Dashboard({ dateRange, setDateRange }: DashboardProps) {
 			<ExpensesStats dateRange={dateRange} />
 			<Grid>
 				<GridCol span={{ base: 12, md: 8 }}>
-					<ExpensesTable dateRange={dateRange} />
+					<ExpensesTable
+						dateRange={dateRange}
+						search={search}
+						setSearch={setSearch}
+					/>
 				</GridCol>
 				<GridCol span={{ base: 12, md: 4 }}>
 					<Flex direction="column" gap="md">
