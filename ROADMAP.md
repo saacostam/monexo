@@ -2,6 +2,12 @@
 
 ## Items before initial release
 
+- [x] TableCategories - Match skeleton to content
+- [x] ExpensesTable - Match skeleton to content
+- [x] Create Expense - Match skeleton to content
+- [x] Update Expense - Match skeleton to content
+
+## Future Enhancements
 - [ ] Add error logging and inline form errors for:
     - [ ] Create Category
     - [ ] Delete Category
@@ -12,7 +18,3 @@
     - [ ] Update Category
     - [ ] Delete Category
     - [ ] Create Expense
-- [x] TableCategories - Match skeleton to content
-- [x] ExpensesTable - Match skeleton to content
-- [x] Create Expense - Match skeleton to content
-- [x] Update Expense - Match skeleton to content
