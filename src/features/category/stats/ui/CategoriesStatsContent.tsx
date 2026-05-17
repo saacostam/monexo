@@ -1,6 +1,7 @@
 import type { PieChartCell } from "@mantine/charts";
 import {
 	Badge,
+	Paper,
 	Table,
 	TableTbody,
 	TableTd,
@@ -13,6 +14,7 @@ import type { ICategory } from "@/features/category/core/domain";
 import type { IExpense, IWithCategory } from "@/features/expense/core/domain";
 import { useAdapters } from "@/shared/adapters/core/app";
 import { IThemeVariant } from "@/shared/adapters/theme/domain";
+import { EmptyQuery } from "@/shared/components";
 
 export interface CategoriesStatsContentProps {
 	expenses: IWithCategory<IExpense>[];
@@ -81,7 +83,14 @@ export function CategoriesStatsContent({
 		);
 	}, [expenses]);
 
-	return (
+	return tableData.length === 0 ? (
+		<Paper bg="transparent" p="md" withBorder>
+			<EmptyQuery
+				description="Try selecting a different date range or adding a new expense"
+				title="No data found"
+			/>
+		</Paper>
+	) : (
 		<Table
 			striped
 			stripedColor={

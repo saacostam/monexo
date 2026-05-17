@@ -61,7 +61,7 @@ export function BurnRateContent({ expenses }: BurnRateContentProps) {
 		return (
 			<Paper bg="transparent" p="md" withBorder>
 				<EmptyQuery
-					title="No date found"
+					title="No data found"
 					description="Try selecting a different date range or adding a new expense"
 				/>
 			</Paper>
