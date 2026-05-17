@@ -115,7 +115,7 @@ export function SignUp() {
 	const rootErrorMessage = errors.root?.message;
 
 	return (
-		<Card mx="auto" maw="512" withBorder data-testid="signup">
+		<Card mx="auto" w="100%" maw="512" withBorder data-testid="signup">
 			<form onSubmit={form.handleSubmit(onSubmit)}>
 				<Flex justify="center" style={{ scale: 1.2 }}>
 					<Logo />
