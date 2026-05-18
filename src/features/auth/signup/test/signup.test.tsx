@@ -1,10 +1,19 @@
+/** biome-ignore-all assist/source/organizeImports: we need to import mockNavigate first */
+import { mockNavigate } from "@/tests/mocks";
+
 import { screen, waitFor } from "@testing-library/dom";
 import type { IAuthClientPayload } from "@/features/auth/core/domain";
 import { SignUp } from "@/features/auth/signup/ui";
+import type { IAnalyticsEvent } from "@/shared/adapters/analytics/domain";
+import type { INotificationAdapterPayload } from "@/shared/adapters/notification/domain";
 import { mockDi, renderWithProviders } from "@/tests";
 import { signupDriver } from "./signup-driver";
 
 describe("SignUp", () => {
+	beforeEach(() => {
+		mockNavigate.mockReset();
+	});
+
 	it("should validate password and confirm password match", async () => {
 		const di = mockDi();
 		renderWithProviders(<SignUp />, di);
@@ -214,5 +223,56 @@ describe("SignUp", () => {
 			expect(passwordError).toBe(expectedError.password);
 			expect(confirmPasswordError).toBe(expectedError.confirmPassword);
 		});
+	});
+
+	it("should signup a user (happy-path)", async () => {
+		const di = mockDi();
+		renderWithProviders(<SignUp />, di);
+
+		const signup = await signupDriver.findContainer();
+		expect(signup).toBeVisible();
+
+		const mockUsername = "test-username";
+		const mockPassword = "test-password";
+
+		await signupDriver.fillForm({
+			username: mockUsername,
+			password: mockPassword,
+			confirmPassword: mockPassword,
+		});
+		await signupDriver.submitForm();
+
+		// Signup client method was called
+		await waitFor(() => {
+			const signupReq: IAuthClientPayload["SignUpIn"] = {
+				username: mockUsername,
+				password: mockPassword,
+			};
+			expect(di.clients.authClient.signup).toHaveBeenCalledExactlyOnceWith(
+				signupReq,
+			);
+		});
+
+		// And side-effect were triggered
+		const notifyIn: INotificationAdapterPayload["NotifyIn"] = {
+			type: "success",
+			msg: "User signed up",
+			title: "Signed up",
+		};
+		expect(
+			di.adapters.notificationAdapter.notify,
+		).toHaveBeenCalledExactlyOnceWith(notifyIn);
+
+		const event: IAnalyticsEvent = {
+			name: "signup",
+			payload: {
+				success: true,
+			},
+		};
+		expect(
+			di.adapters.analyticsAdapter.trackEvent,
+		).toHaveBeenCalledExactlyOnceWith(event);
+
+		expect(mockNavigate).toHaveBeenCalledExactlyOnceWith("/");
 	});
 });
