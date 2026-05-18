@@ -1,21 +1,19 @@
-import { screen } from "@testing-library/dom";
+import { fireEvent, screen } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 
 class ManageCategoryDriver {
 	async fillForm(args: { name: string; description: string }) {
 		const nameField = screen.getByRole("textbox", { name: /name/i });
-		await userEvent.clear(nameField);
-		if (args.name) {
-			await userEvent.type(nameField, args.name);
-		}
+		fireEvent.change(nameField, {
+			target: { value: args.name },
+		});
 
 		const descriptionField = screen.getByRole("textbox", {
 			name: /description/i,
 		});
-		await userEvent.clear(descriptionField);
-		if (args.description) {
-			await userEvent.type(descriptionField, args.description);
-		}
+		fireEvent.change(descriptionField, {
+			target: { value: args.description },
+		});
 	}
 
 	async submitForm(args: { buttonCopy: string }) {
