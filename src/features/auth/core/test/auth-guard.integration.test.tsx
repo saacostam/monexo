@@ -6,8 +6,8 @@ import type { Location } from "react-router";
 import { RouteName } from "@/shared/router/app";
 import type { ISession } from "@/shared/adapters/session/domain";
 import { mockDi, renderWithProviders } from "@/tests";
-import { AuthGuard } from "./auth-guard";
 import { genRoute } from "@/shared/router/app";
+import { AuthGuard } from "@/features/auth/core/ui";
 
 function setupAuthGuard({
 	pathname = "/home",

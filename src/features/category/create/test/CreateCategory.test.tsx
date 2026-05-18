@@ -1,8 +1,8 @@
 import { screen, waitFor } from "@testing-library/dom";
 import type { ICategoryClientPayload } from "@/features/category/core/domain";
+import { CreateCategory } from "@/features/category/create/ui";
 import { manageCategoryDriver } from "@/features/category/manage-category/test";
 import { mockDi, renderWithProviders } from "@/tests";
-import { CreateCategory } from "./CreateCategory";
 
 function setup() {
 	const di = mockDi();
