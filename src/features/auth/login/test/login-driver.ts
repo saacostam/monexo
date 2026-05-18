@@ -1,4 +1,4 @@
-import { screen } from "@testing-library/dom";
+import { fireEvent, screen } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 
 enum Selector {
@@ -12,10 +12,14 @@ class LoginDriver {
 
 	async fillForm(args: { username: string; password: string }) {
 		const username = screen.getByRole("textbox", { name: /username/i });
-		await userEvent.type(username, args.username);
+		fireEvent.change(username, {
+			target: { value: args.username },
+		});
 
 		const password = screen.getByPlaceholderText("Password");
-		await userEvent.type(password, args.password);
+		fireEvent.change(password, {
+			target: { value: args.password },
+		});
 	}
 
 	async submitForm() {
