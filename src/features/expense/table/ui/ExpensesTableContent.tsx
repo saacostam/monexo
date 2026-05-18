@@ -148,7 +148,7 @@ const Actions = (props: {
 }) => (
 	<Flex direction="row" gap="xs" justify="end">
 		<Tooltip label="Edit">
-			<ActionIcon onClick={props.onClickEdit} size="xs" variant="subtle">
+			<ActionIcon onClick={props.onClickEdit} size="xs" variant="light">
 				<PencilSquareIcon />
 			</ActionIcon>
 		</Tooltip>
@@ -157,7 +157,7 @@ const Actions = (props: {
 				color="red"
 				onClick={props.onClickDelete}
 				size="xs"
-				variant="subtle"
+				variant="light"
 			>
 				<TrashIcon />
 			</ActionIcon>
