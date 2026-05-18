@@ -24,12 +24,18 @@ import { FormUtils } from "@/shared/utils/form";
 
 const signUpSchema = z
 	.object({
-		username: z.string().min(1, { message: "Username is required" }).max(48),
-		password: z.string().min(1, { message: "Password is required" }).max(48),
+		username: z
+			.string()
+			.min(1, { message: "Username is required" })
+			.max(48, "Max 48 characters allowed for username"),
+		password: z
+			.string()
+			.min(1, { message: "Password is required" })
+			.max(48, "Max 48 characters allowed for password"),
 		confirmPassword: z
 			.string()
 			.min(1, { message: "Confirm password is required" })
-			.max(48),
+			.max(48, "Max 48 characters allowed for confirm password"),
 	})
 	.refine((data) => data.password === data.confirmPassword, {
 		message: "Passwords do not match",
@@ -56,7 +62,8 @@ export function SignUp() {
 		(data: ReturnType<typeof signUpSchema.parse>) => {
 			signUp.mutate(
 				{
-					...data,
+					username: data.username,
+					password: data.password,
 				},
 				{
 					onSuccess: () => {
