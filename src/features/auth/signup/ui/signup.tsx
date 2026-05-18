@@ -52,6 +52,7 @@ export function SignUp() {
 		defaultValues: {
 			username: "",
 			password: "",
+			confirmPassword: "",
 		},
 		resolver: zodResolver(signUpSchema),
 	});
