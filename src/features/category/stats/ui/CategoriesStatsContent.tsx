@@ -121,7 +121,7 @@ export function CategoriesStatsContent({
 							{row.averageTransaction.toFixed(2)}
 						</TableTd>
 						<TableTd style={{ textAlign: "end" }}>
-							{row.transactionCount.toFixed(2)}
+							{row.totalSpent.toFixed(2)}
 						</TableTd>
 					</TableTr>
 				))}
