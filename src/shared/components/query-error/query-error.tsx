@@ -28,7 +28,12 @@ export function QueryError({
 	}, [error, errorMonitoringAdapter, where]);
 
 	return (
-		<Alert color="red" icon={<ExclamationCircleIcon />} title={title}>
+		<Alert
+			color="red"
+			data-testid="query-error"
+			icon={<ExclamationCircleIcon />}
+			title={title}
+		>
 			{msg}
 			<Flex justify="end">
 				<Button color="red" loading={retry.isPending} onClick={retry.onClick}>
