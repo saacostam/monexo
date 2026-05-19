@@ -36,15 +36,17 @@ describe("CreateCategory", () => {
 			buttonCopy: "Create Category",
 		});
 
+		const createReq: ICategoryClientPayload["CreateRequest"] = {
+			name: "test",
+			description: "test",
+		};
+
 		await waitFor(() => {
-			const createReq: ICategoryClientPayload["CreateRequest"] = {
-				name: "test",
-				description: "test",
-			};
 			expect(di.clients.category.create).toHaveBeenCalledExactlyOnceWith(
 				createReq,
 			);
 		});
+
 		expect(onSuccess).toHaveBeenCalledOnce();
 		expect(onError).not.toHaveBeenCalled();
 		expect(onSettled).toHaveBeenCalledOnce();
@@ -53,21 +55,23 @@ describe("CreateCategory", () => {
 	it("should handle errors when creating a category", async () => {
 		const { di, onError, onSuccess, onSettled } = setup();
 
+		di.clients.category.create.mockRejectedValue(new Error());
+
 		await manageCategoryDriver.fillForm({
 			name: "test",
 			description: "test",
 		});
 
-		di.clients.category.create.mockRejectedValue(new Error());
 		await manageCategoryDriver.submitForm({
 			buttonCopy: "Create Category",
 		});
 
+		const createReq: ICategoryClientPayload["CreateRequest"] = {
+			name: "test",
+			description: "test",
+		};
+
 		await waitFor(() => {
-			const createReq: ICategoryClientPayload["CreateRequest"] = {
-				name: "test",
-				description: "test",
-			};
 			expect(di.clients.category.create).toHaveBeenCalledExactlyOnceWith(
 				createReq,
 			);
@@ -79,6 +83,7 @@ describe("CreateCategory", () => {
 	});
 
 	const inputLimitsTestCases: {
+		description: string;
 		isSubmittable: boolean;
 		input: {
 			name: string;
@@ -90,6 +95,7 @@ describe("CreateCategory", () => {
 		};
 	}[] = [
 		{
+			description: "should require name",
 			isSubmittable: false,
 			input: {
 				name: "",
@@ -101,6 +107,7 @@ describe("CreateCategory", () => {
 			},
 		},
 		{
+			description: "should allow name with 30 characters",
 			isSubmittable: true,
 			input: {
 				name: "a".repeat(30),
@@ -112,6 +119,7 @@ describe("CreateCategory", () => {
 			},
 		},
 		{
+			description: "should reject name longer than 30 characters",
 			isSubmittable: false,
 			input: {
 				name: "a".repeat(31),
@@ -123,6 +131,7 @@ describe("CreateCategory", () => {
 			},
 		},
 		{
+			description: "should allow description with 500 characters",
 			isSubmittable: true,
 			input: {
 				name: "test",
@@ -134,6 +143,7 @@ describe("CreateCategory", () => {
 			},
 		},
 		{
+			description: "should reject description longer than 500 characters",
 			isSubmittable: false,
 			input: {
 				name: "test",
@@ -147,7 +157,7 @@ describe("CreateCategory", () => {
 	];
 
 	describe("CreateCategory - input limits", () => {
-		it.each(inputLimitsTestCases)("should validate input %#", async ({
+		it.each(inputLimitsTestCases)("$description", async ({
 			isSubmittable,
 			input,
 			expectedError,
@@ -160,33 +170,36 @@ describe("CreateCategory", () => {
 				buttonCopy: "Create Category",
 			});
 
-			const nameField = screen.getByRole("textbox", { name: /name/i });
+			const nameField = screen.getByRole("textbox", {
+				name: /name/i,
+			});
+
 			const descriptionField = screen.getByRole("textbox", {
 				name: /description/i,
 			});
 
 			if (isSubmittable) {
-				await waitFor(() => {
-					const createReq: ICategoryClientPayload["CreateRequest"] = {
-						name: input.name,
-						description: input.description,
-					};
+				const createReq: ICategoryClientPayload["CreateRequest"] = {
+					name: input.name,
+					description: input.description,
+				};
 
+				await waitFor(() => {
 					expect(di.clients.category.create).toHaveBeenCalledExactlyOnceWith(
 						createReq,
 					);
 				});
 			} else {
-				await waitFor(() => {
-					expect(di.clients.category.create).not.toHaveBeenCalled();
-				});
+				expect(di.clients.category.create).not.toHaveBeenCalled();
 			}
 
 			const nameError = manageCategoryDriver.getFieldError(nameField);
+
 			const descriptionError =
 				manageCategoryDriver.getFieldError(descriptionField);
 
 			expect(nameError).toBe(expectedError.name);
+
 			expect(descriptionError).toBe(expectedError.description);
 		});
 	});
