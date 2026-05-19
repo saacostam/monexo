@@ -1,6 +1,7 @@
 import type { PieChartCell } from "@mantine/charts";
 import {
 	Badge,
+	Box,
 	Paper,
 	Table,
 	TableTbody,
@@ -83,49 +84,53 @@ export function CategoriesStatsContent({
 		);
 	}, [expenses]);
 
-	return tableData.length === 0 ? (
-		<Paper bg="transparent" p="md" withBorder>
-			<EmptyQuery
-				description="Try selecting a different date range or adding a new expense"
-				title="No data found"
-			/>
-		</Paper>
-	) : (
-		<Table
-			striped
-			stripedColor={
-				themeAdapter.theme === IThemeVariant.LIGHT ? "gray.1" : "dark.7"
-			}
-			withTableBorder
-		>
-			<TableThead>
-				<TableTr>
-					<TableTh>Category</TableTh>
-					<TableTh style={{ textAlign: "end" }} visibleFrom="xs">
-						Transaction Count
-					</TableTh>
-					<TableTh style={{ textAlign: "end" }}>Average</TableTh>
-					<TableTh style={{ textAlign: "end" }}>Total</TableTh>
-				</TableTr>
-			</TableThead>
-			<TableTbody>
-				{tableData.map((row) => (
-					<TableTr key={row.id}>
-						<TableTd>
-							<Badge color={row.color}>{row.name}</Badge>
-						</TableTd>
-						<TableTd style={{ textAlign: "end" }} visibleFrom="xs">
-							{row.transactionCount.toFixed(2)}
-						</TableTd>
-						<TableTd style={{ textAlign: "end" }}>
-							{row.averageTransaction.toFixed(2)}
-						</TableTd>
-						<TableTd style={{ textAlign: "end" }}>
-							{row.totalSpent.toFixed(2)}
-						</TableTd>
-					</TableTr>
-				))}
-			</TableTbody>
-		</Table>
+	return (
+		<Box data-testid="categories-stats-content">
+			{tableData.length === 0 ? (
+				<Paper bg="transparent" p="md" withBorder>
+					<EmptyQuery
+						description="Try selecting a different date range or adding a new expense"
+						title="No data found"
+					/>
+				</Paper>
+			) : (
+				<Table
+					striped
+					stripedColor={
+						themeAdapter.theme === IThemeVariant.LIGHT ? "gray.1" : "dark.7"
+					}
+					withTableBorder
+				>
+					<TableThead>
+						<TableTr>
+							<TableTh>Category</TableTh>
+							<TableTh style={{ textAlign: "end" }} visibleFrom="xs">
+								Transaction Count
+							</TableTh>
+							<TableTh style={{ textAlign: "end" }}>Average</TableTh>
+							<TableTh style={{ textAlign: "end" }}>Total</TableTh>
+						</TableTr>
+					</TableThead>
+					<TableTbody>
+						{tableData.map((row) => (
+							<TableTr key={row.id}>
+								<TableTd>
+									<Badge color={row.color}>{row.name}</Badge>
+								</TableTd>
+								<TableTd style={{ textAlign: "end" }} visibleFrom="xs">
+									{row.transactionCount.toFixed(2)}
+								</TableTd>
+								<TableTd style={{ textAlign: "end" }}>
+									{row.averageTransaction.toFixed(2)}
+								</TableTd>
+								<TableTd style={{ textAlign: "end" }}>
+									{row.totalSpent.toFixed(2)}
+								</TableTd>
+							</TableTr>
+						))}
+					</TableTbody>
+				</Table>
+			)}
+		</Box>
 	);
 }

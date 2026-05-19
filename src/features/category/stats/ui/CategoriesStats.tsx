@@ -40,5 +40,5 @@ export function CategoriesStats({ dateRange }: CategoriesStatsProps) {
 			<CategoriesStatsContent expenses={queryAllExpensesInCalendarRange.data} />
 		);
 
-	return <Skeleton h="256px" />;
+	return <Skeleton data-testid="categories-stats-skeleton" h="256px" />;
 }
