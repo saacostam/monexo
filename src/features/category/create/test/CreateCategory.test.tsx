@@ -45,11 +45,11 @@ describe("CreateCategory", () => {
 			expect(di.clients.category.create).toHaveBeenCalledExactlyOnceWith(
 				createReq,
 			);
-		});
 
-		expect(onSuccess).toHaveBeenCalledOnce();
-		expect(onError).not.toHaveBeenCalled();
-		expect(onSettled).toHaveBeenCalledOnce();
+			expect(onSuccess).toHaveBeenCalledOnce();
+			expect(onError).not.toHaveBeenCalled();
+			expect(onSettled).toHaveBeenCalledOnce();
+		});
 	});
 
 	it("should handle errors when creating a category", async () => {
@@ -75,11 +75,11 @@ describe("CreateCategory", () => {
 			expect(di.clients.category.create).toHaveBeenCalledExactlyOnceWith(
 				createReq,
 			);
-		});
 
-		expect(onError).toHaveBeenCalledOnce();
-		expect(onSuccess).not.toHaveBeenCalled();
-		expect(onSettled).toHaveBeenCalledOnce();
+			expect(onError).toHaveBeenCalledOnce();
+			expect(onSuccess).not.toHaveBeenCalled();
+			expect(onSettled).toHaveBeenCalledOnce();
+		});
 	});
 
 	const inputLimitsTestCases: {
@@ -190,7 +190,9 @@ describe("CreateCategory", () => {
 					);
 				});
 			} else {
-				expect(di.clients.category.create).not.toHaveBeenCalled();
+				await waitFor(() => {
+					expect(di.clients.category.create).not.toHaveBeenCalled();
+				});
 			}
 
 			const nameError = manageCategoryDriver.getFieldError(nameField);
