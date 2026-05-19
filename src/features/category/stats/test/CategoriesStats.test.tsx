@@ -1,4 +1,4 @@
-import { waitFor, within } from "@testing-library/dom";
+import { within } from "@testing-library/dom";
 import { categoryMockFactory } from "@/features/category/core/test";
 import { CategoriesStats } from "@/features/category/stats/ui";
 import type {
@@ -34,9 +34,10 @@ describe("CategoriesStats", () => {
 		);
 
 		const skeleton = await categoriesStatsDriver.findSkeleton();
-		expect(skeleton).toBeVisible();
 
-		await expect(categoriesStatsDriver.findContent()).rejects.toThrow();
+		expect(skeleton).toBeVisible();
+		expect(categoriesStatsDriver.queryContent()).not.toBeInTheDocument();
+		expect(categoriesStatsDriver.queryQueryError()).not.toBeInTheDocument();
 	});
 
 	it("should handle query error state", async () => {
@@ -64,15 +65,11 @@ describe("CategoriesStats", () => {
 			di,
 		);
 
-		const skeleton = await categoriesStatsDriver.findSkeleton();
-		expect(skeleton).toBeVisible();
+		const queryError = await categoriesStatsDriver.findQueryError();
 
-		await waitFor(async () => {
-			const queryError = await categoriesStatsDriver.findQueryError();
-			expect(queryError).toBeVisible();
-		});
-
-		await expect(categoriesStatsDriver.findContent()).rejects.toThrow();
+		expect(queryError).toBeVisible();
+		expect(categoriesStatsDriver.queryContent()).not.toBeInTheDocument();
+		expect(categoriesStatsDriver.querySkeleton()).not.toBeInTheDocument();
 	});
 
 	it("should render elements", async () => {
@@ -87,15 +84,16 @@ describe("CategoriesStats", () => {
 			value: 200,
 		});
 
-		// We will use 2 categories: one private and one public
 		const privateCategory = categoryMockFactory.createCategory({
 			ownership: { type: "private", userId: "user-id" },
 		});
+
 		const publicCategory = categoryMockFactory.createCategory({
 			ownership: { type: "public" },
 		});
 
-		const privateCategoryExpensesAmount: number[] = [300, 550, 400];
+		const privateCategoryExpensesAmount = [300, 550, 400];
+
 		const privateCategoryExpenses: IWithCategory<IExpense>[] =
 			privateCategoryExpensesAmount.map((amount) =>
 				expenseMockFactory.createExpenseWithCategory({
@@ -105,7 +103,8 @@ describe("CategoriesStats", () => {
 				}),
 			);
 
-		const publicCategoryExpensesAmount: number[] = [200, 700, 1000];
+		const publicCategoryExpensesAmount = [200, 700, 1000];
+
 		const publicCategoryExpenses: IWithCategory<IExpense>[] =
 			publicCategoryExpensesAmount.map((amount) =>
 				expenseMockFactory.createExpenseWithCategory({
@@ -119,6 +118,7 @@ describe("CategoriesStats", () => {
 			...privateCategoryExpenses,
 			...publicCategoryExpenses,
 		];
+
 		di.clients.expense.getAllInRange.mockResolvedValue(response);
 
 		renderWithProviders(
@@ -126,16 +126,11 @@ describe("CategoriesStats", () => {
 			di,
 		);
 
-		await waitFor(async () => {
-			const content = await categoriesStatsDriver.findContent();
-			expect(content).toBeVisible();
-		});
-
-		await expect(categoriesStatsDriver.findQueryError()).rejects.toThrow();
-		await expect(categoriesStatsDriver.findSkeleton()).rejects.toThrow();
-
 		const content = await categoriesStatsDriver.findContent();
+
 		expect(content).toBeVisible();
+		expect(categoriesStatsDriver.queryQueryError()).not.toBeInTheDocument();
+		expect(categoriesStatsDriver.querySkeleton()).not.toBeInTheDocument();
 
 		const items = await within(content).findAllByTestId(
 			categoriesStatsDriver.contentItemSelector,
@@ -143,7 +138,6 @@ describe("CategoriesStats", () => {
 
 		expect(items).toHaveLength(2);
 
-		// Rows are sorted by totalSpent desc
 		const expectedRows = [
 			{
 				category: publicCategory.name,

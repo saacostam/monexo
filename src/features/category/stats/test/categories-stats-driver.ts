@@ -8,19 +8,31 @@ enum Selector {
 }
 
 class CategoriesStatsDriver {
-	async findContent() {
+	contentItemSelector = Selector.CONTENT_ITEM;
+
+	findContent() {
 		return screen.findByTestId(Selector.CONTENT);
 	}
 
-	async findQueryError() {
+	queryContent() {
+		return screen.queryByTestId(Selector.CONTENT);
+	}
+
+	findQueryError() {
 		return screen.findByTestId(Selector.QUERY_ERROR);
 	}
 
-	async findSkeleton() {
+	queryQueryError() {
+		return screen.queryByTestId(Selector.QUERY_ERROR);
+	}
+
+	findSkeleton() {
 		return screen.findByTestId(Selector.SKELETON);
 	}
 
-	contentItemSelector = Selector.CONTENT_ITEM;
+	querySkeleton() {
+		return screen.queryByTestId(Selector.SKELETON);
+	}
 }
 
 export const categoriesStatsDriver = new CategoriesStatsDriver();
