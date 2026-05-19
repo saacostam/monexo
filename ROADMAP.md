@@ -18,3 +18,4 @@
     - [ ] Update Category
     - [ ] Delete Category
     - [ ] Create Expense
+    - [ ] Signup Sad Path - Api Call 
