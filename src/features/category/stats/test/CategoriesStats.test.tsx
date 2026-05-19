@@ -1,4 +1,4 @@
-import { within } from "@testing-library/dom";
+import { waitForElementToBeRemoved, within } from "@testing-library/dom";
 import { categoryMockFactory } from "@/features/category/core/test";
 import { CategoriesStats } from "@/features/category/stats/ui";
 import type {
@@ -11,18 +11,23 @@ import { DomainError, DomainErrorType } from "@/shared/errors/domain";
 import { mockDi, renderWithProviders } from "@/tests";
 import { categoriesStatsDriver } from "./categories-stats-driver";
 
+function setupDateMocks(di: ReturnType<typeof mockDi>) {
+	di.adapters.date.fromYyyyMmDdToUtcMsSinceEpoch.mockReturnValue({
+		ok: true,
+		value: 100,
+	});
+
+	di.adapters.date.plus.mockReturnValue({
+		ok: true,
+		value: 200,
+	});
+}
+
 describe("CategoriesStats", () => {
 	it("should handle loading state", async () => {
 		const di = mockDi();
 
-		di.adapters.date.fromYyyyMmDdToUtcMsSinceEpoch.mockReturnValue({
-			ok: true,
-			value: 100,
-		});
-		di.adapters.date.plus.mockReturnValue({
-			ok: true,
-			value: 200,
-		});
+		setupDateMocks(di);
 
 		di.clients.expense.getAllInRange.mockImplementation(
 			() => new Promise(() => {}),
@@ -36,6 +41,7 @@ describe("CategoriesStats", () => {
 		const skeleton = await categoriesStatsDriver.findSkeleton();
 
 		expect(skeleton).toBeVisible();
+
 		expect(categoriesStatsDriver.queryContent()).not.toBeInTheDocument();
 		expect(categoriesStatsDriver.queryQueryError()).not.toBeInTheDocument();
 	});
@@ -43,14 +49,7 @@ describe("CategoriesStats", () => {
 	it("should handle query error state", async () => {
 		const di = mockDi();
 
-		di.adapters.date.fromYyyyMmDdToUtcMsSinceEpoch.mockReturnValue({
-			ok: true,
-			value: 100,
-		});
-		di.adapters.date.plus.mockReturnValue({
-			ok: true,
-			value: 200,
-		});
+		setupDateMocks(di);
 
 		di.clients.expense.getAllInRange.mockRejectedValue(
 			new DomainError({
@@ -65,9 +64,12 @@ describe("CategoriesStats", () => {
 			di,
 		);
 
-		const queryError = await categoriesStatsDriver.findQueryError();
+		const skeleton = await categoriesStatsDriver.findSkeleton();
+		await waitForElementToBeRemoved(skeleton);
 
+		const queryError = await categoriesStatsDriver.findQueryError();
 		expect(queryError).toBeVisible();
+
 		expect(categoriesStatsDriver.queryContent()).not.toBeInTheDocument();
 		expect(categoriesStatsDriver.querySkeleton()).not.toBeInTheDocument();
 	});
@@ -75,25 +77,18 @@ describe("CategoriesStats", () => {
 	it("should render elements", async () => {
 		const di = mockDi();
 
-		di.adapters.date.fromYyyyMmDdToUtcMsSinceEpoch.mockReturnValue({
-			ok: true,
-			value: 100,
-		});
-		di.adapters.date.plus.mockReturnValue({
-			ok: true,
-			value: 200,
-		});
+		setupDateMocks(di);
 
+		// We create two categories
 		const privateCategory = categoryMockFactory.createCategory({
 			ownership: { type: "private", userId: "user-id" },
 		});
-
 		const publicCategory = categoryMockFactory.createCategory({
 			ownership: { type: "public" },
 		});
 
+		// And create expenses with the following amounts
 		const privateCategoryExpensesAmount = [300, 550, 400];
-
 		const privateCategoryExpenses: IWithCategory<IExpense>[] =
 			privateCategoryExpensesAmount.map((amount) =>
 				expenseMockFactory.createExpenseWithCategory({
@@ -104,7 +99,6 @@ describe("CategoriesStats", () => {
 			);
 
 		const publicCategoryExpensesAmount = [200, 700, 1000];
-
 		const publicCategoryExpenses: IWithCategory<IExpense>[] =
 			publicCategoryExpensesAmount.map((amount) =>
 				expenseMockFactory.createExpenseWithCategory({
@@ -126,38 +120,40 @@ describe("CategoriesStats", () => {
 			di,
 		);
 
-		const content = await categoriesStatsDriver.findContent();
+		const skeleton = await categoriesStatsDriver.findSkeleton();
+		await waitForElementToBeRemoved(skeleton);
 
+		const content = await categoriesStatsDriver.findContent();
 		expect(content).toBeVisible();
+
 		expect(categoriesStatsDriver.queryQueryError()).not.toBeInTheDocument();
 		expect(categoriesStatsDriver.querySkeleton()).not.toBeInTheDocument();
 
-		const items = await within(content).findAllByTestId(
+		const items = within(content).getAllByTestId(
 			categoriesStatsDriver.contentItemSelector,
 		);
-
 		expect(items).toHaveLength(2);
 
+		const publicTotal = publicCategoryExpensesAmount.reduce(
+			(sm, v) => sm + v,
+			0,
+		);
+		const privateTotal = privateCategoryExpensesAmount.reduce(
+			(sm, v) => sm + v,
+			0,
+		);
 		const expectedRows = [
 			{
 				category: publicCategory.name,
 				transactionCount: "3.00",
-				average: (
-					publicCategoryExpensesAmount.reduce((sm, v) => sm + v, 0) / 3
-				).toFixed(2),
-				total: publicCategoryExpensesAmount
-					.reduce((sm, v) => sm + v, 0)
-					.toFixed(2),
+				average: (publicTotal / 3).toFixed(2),
+				total: publicTotal.toFixed(2),
 			},
 			{
 				category: privateCategory.name,
 				transactionCount: "3.00",
-				average: (
-					privateCategoryExpensesAmount.reduce((sm, v) => sm + v, 0) / 3
-				).toFixed(2),
-				total: privateCategoryExpensesAmount
-					.reduce((sm, v) => sm + v, 0)
-					.toFixed(2),
+				average: (privateTotal / 3).toFixed(2),
+				total: privateTotal.toFixed(2),
 			},
 		];
 
