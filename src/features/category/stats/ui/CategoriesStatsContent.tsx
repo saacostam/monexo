@@ -113,7 +113,7 @@ export function CategoriesStatsContent({
 					</TableThead>
 					<TableTbody>
 						{tableData.map((row) => (
-							<TableTr key={row.id}>
+							<TableTr key={row.id} data-testid="categories-stats-content-row">
 								<TableTd>
 									<Badge color={row.color}>{row.name}</Badge>
 								</TableTd>
