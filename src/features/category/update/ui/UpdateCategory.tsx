@@ -43,7 +43,9 @@ export function UpdateCategory({
 					onSettled={onSettled}
 				/>
 			)}
-			{queryCategoryById.isLoading && <Skeleton height="128px" />}
+			{queryCategoryById.isLoading && (
+				<Skeleton data-testid="update-category-skeleton" height="128px" />
+			)}
 		</Box>
 	);
 }

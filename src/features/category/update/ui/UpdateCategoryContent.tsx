@@ -1,3 +1,4 @@
+import { Box } from "@mantine/core";
 import { useCallback } from "react";
 import { useMutateUpdateCategory } from "@/features/category/core/app";
 import type {
@@ -51,11 +52,13 @@ export function UpdateCategoryContent({
 	);
 
 	return (
-		<ManageCategory
-			action="Update"
-			form={form}
-			isPending={updateCategory.isPending}
-			onSubmit={onSubmit}
-		/>
+		<Box data-testid="update-category-content">
+			<ManageCategory
+				action="Update"
+				form={form}
+				isPending={updateCategory.isPending}
+				onSubmit={onSubmit}
+			/>
+		</Box>
 	);
 }
