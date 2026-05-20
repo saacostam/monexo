@@ -1,4 +1,4 @@
-import { Skeleton } from "@mantine/core";
+import { Box, Skeleton } from "@mantine/core";
 import { useQueryCategoryById } from "@/features/category/core/app";
 import type { ICategoryClientPayload } from "@/features/category/core/domain";
 import { useRetry } from "@/shared/async-state";
@@ -25,25 +25,25 @@ export function UpdateCategory({
 		queryCategoryById.isLoading,
 	);
 
-	if (queryCategoryById.isError)
-		return (
-			<QueryError
-				msg="Unable to retrieve category information"
-				retry={retry}
-				error={queryCategoryById.error}
-				where="UpdateCategory.queryCategoryById.isError"
-			/>
-		);
-
-	if (queryCategoryById.isSuccess)
-		return (
-			<UpdateCategoryContent
-				category={queryCategoryById.data}
-				onError={onError}
-				onSuccess={onSuccess}
-				onSettled={onSettled}
-			/>
-		);
-
-	return <Skeleton height="128px" />;
+	return (
+		<Box data-testid="update-category">
+			{queryCategoryById.isError && (
+				<QueryError
+					msg="Unable to retrieve category information"
+					retry={retry}
+					error={queryCategoryById.error}
+					where="UpdateCategory.queryCategoryById.isError"
+				/>
+			)}
+			{queryCategoryById.isSuccess && (
+				<UpdateCategoryContent
+					category={queryCategoryById.data}
+					onError={onError}
+					onSuccess={onSuccess}
+					onSettled={onSettled}
+				/>
+			)}
+			{queryCategoryById.isLoading && <Skeleton height="128px" />}
+		</Box>
+	);
 }

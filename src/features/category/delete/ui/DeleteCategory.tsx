@@ -1,4 +1,4 @@
-import { Button, Flex, Space, Text } from "@mantine/core";
+import { Box, Button, Flex, Space, Text } from "@mantine/core";
 import { useMutateRemoveCategory } from "@/features/category/core/app";
 
 export interface DeleteCategoryProps {
@@ -30,7 +30,7 @@ export function DeleteCategory({
 	};
 
 	return (
-		<>
+		<Box data-testid="delete-category">
 			<Text>Are you sure you want to delete this category?</Text>
 			<Space h="md" />
 			<Flex direction="row" gap="md" wrap="wrap" justify="space-between">
@@ -46,6 +46,6 @@ export function DeleteCategory({
 					Delete
 				</Button>
 			</Flex>
-		</>
+		</Box>
 	);
 }
