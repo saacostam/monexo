@@ -1,4 +1,9 @@
-import { waitForElementToBeRemoved, within } from "@testing-library/dom";
+import {
+	screen,
+	waitFor,
+	waitForElementToBeRemoved,
+	within,
+} from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 import type { ICategoryClientPayload } from "@/features/category/core/domain";
 import { categoryMockFactory } from "@/features/category/core/test";
@@ -7,6 +12,12 @@ import { DomainError, DomainErrorType } from "@/shared/errors/domain";
 import { mockDi, renderWithProviders } from "@/tests";
 import { tableCategoriesDriver } from "./table-categories-driver";
 
+/**
+ * Only validates the rendering/visibility of create, update,
+ * and delete container components.
+ *
+ * Does not validate behavioral or integration logic.
+ */
 describe("TableCategories", () => {
 	it("should handle loading state", async () => {
 		const di = mockDi();
@@ -121,8 +132,11 @@ describe("TableCategories", () => {
 			},
 		});
 
-		const response: ICategoryClientPayload["GetAllResponse"] = [category];
-		di.clients.category.getAll.mockResolvedValue(response);
+		const getAllResponse: ICategoryClientPayload["GetAllResponse"] = [category];
+		di.clients.category.getAll.mockResolvedValue(getAllResponse);
+
+		const getByIdResponse: ICategoryClientPayload["GetByIdResponse"] = category;
+		di.clients.category.getById.mockResolvedValue(getByIdResponse);
 
 		renderWithProviders(<TableCategories />, di);
 
@@ -146,5 +160,27 @@ describe("TableCategories", () => {
 		const modal = await tableCategoriesDriver.findModal();
 		expect(modal).toBeVisible();
 		expect(within(modal).getByTestId(testId)).toBeVisible();
+	});
+
+	it("should SHOW create modal", async () => {
+		const di = mockDi();
+
+		const getAllResponse: ICategoryClientPayload["GetAllResponse"] = [
+			categoryMockFactory.createCategory(),
+		];
+		di.clients.category.getAll.mockResolvedValue(getAllResponse);
+
+		renderWithProviders(<TableCategories />, di);
+
+		const createButton = screen.getByRole("button", {
+			name: /Create Category/i,
+		});
+		await userEvent.click(createButton);
+
+		await waitFor(async () => {
+			const modal = await tableCategoriesDriver.findModal();
+			expect(modal).toBeVisible();
+			expect(within(modal).getByTestId("create-category")).toBeVisible();
+		});
 	});
 });
