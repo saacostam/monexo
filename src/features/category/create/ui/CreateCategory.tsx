@@ -1,3 +1,4 @@
+import { Box } from "@mantine/core";
 import { useCallback } from "react";
 import { useMutateCreateCategory } from "@/features/category/core/app";
 import type { ICategoryClientPayload } from "@/features/category/core/domain";
@@ -41,11 +42,13 @@ export function CreateCategory({
 	);
 
 	return (
-		<ManageCategory
-			action="Create"
-			form={form}
-			isPending={createCategory.isPending}
-			onSubmit={onSubmit}
-		/>
+		<Box data-testid="create-category">
+			<ManageCategory
+				action="Create"
+				form={form}
+				isPending={createCategory.isPending}
+				onSubmit={onSubmit}
+			/>
+		</Box>
 	);
 }
