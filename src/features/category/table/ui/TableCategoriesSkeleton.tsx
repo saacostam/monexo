@@ -11,7 +11,7 @@ export function TableCategoriesSkeleton() {
 	);
 
 	return (
-		<Flex direction="column" gap="md">
+		<Flex data-testid="table-categories-skeleton" direction="column" gap="md">
 			<Skeleton h="112px" />
 			<Flex direction="column" gap="xs">
 				{content}

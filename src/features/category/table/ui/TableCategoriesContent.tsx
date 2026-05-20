@@ -92,7 +92,7 @@ export function TableCategoriesContent({
 	);
 
 	return (
-		<Flex direction="column" gap="lg">
+		<Flex data-testid="table-categories-content" direction="column" gap="lg">
 			<Card withBorder>
 				<Title size="h4">Filters</Title>
 				<Space h="sm" />
