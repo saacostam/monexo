@@ -1,4 +1,4 @@
-import { screen, within } from "@testing-library/dom";
+import { screen, waitFor, within } from "@testing-library/dom";
 
 type DriverSelectors = Record<string, { default: string }>;
 
@@ -7,6 +7,28 @@ export class Driver<T extends DriverSelectors> {
 
 	findByTestId(key: keyof T): Promise<HTMLElement> {
 		return screen.findByTestId(this.selectors[key].default);
+	}
+
+	async findModal(): Promise<HTMLElement> {
+		return await waitFor(() => {
+			const modals = screen.getAllByTestId("modal");
+
+			const openModal = modals.find((modal) => {
+				const isVisible =
+					modal.getAttribute("aria-hidden") !== "true" &&
+					!modal.hasAttribute("hidden");
+
+				const hasContent = modal.children.length > 0;
+
+				return isVisible && hasContent;
+			});
+
+			if (!openModal) {
+				throw new Error("No open modal found");
+			}
+
+			return openModal;
+		});
 	}
 
 	findWithinByTestId(element: HTMLElement, key: keyof T): Promise<HTMLElement> {

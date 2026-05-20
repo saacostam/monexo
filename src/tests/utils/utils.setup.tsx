@@ -2,6 +2,7 @@ import { MantineProvider } from "@mantine/core";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 import { BrowserRouter } from "react-router";
+import { theme } from "@/mantine-theme";
 import { AdaptersContext } from "@/shared/adapters/core/app";
 import type { IAdapters } from "@/shared/adapters/core/domain";
 import { ClientsContext } from "@/shared/clients/app";
@@ -62,7 +63,7 @@ export function TestProviders({ children }: ProvidersProps) {
 	const queryClient = createTestQueryClient();
 
 	return (
-		<MantineProvider>
+		<MantineProvider theme={theme}>
 			<QueryClientProvider client={queryClient}>
 				<BrowserRouter>{children}</BrowserRouter>
 			</QueryClientProvider>
