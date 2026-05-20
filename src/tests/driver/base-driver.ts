@@ -1,0 +1,19 @@
+import { screen } from "@testing-library/dom";
+
+type DriverSelectors = Record<string, { default: string }>;
+
+export class Driver<T extends DriverSelectors> {
+	constructor(private readonly selectors: T) {}
+
+	findByTestId(key: keyof T): Promise<HTMLElement> {
+		return screen.findByTestId(this.selectors[key].default);
+	}
+
+	queryByTestId(key: keyof T): HTMLElement | null {
+		return screen.queryByTestId(this.selectors[key].default);
+	}
+
+	selector(key: keyof T): string {
+		return this.selectors[key].default;
+	}
+}
