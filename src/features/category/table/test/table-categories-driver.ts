@@ -4,6 +4,9 @@ const tableCategoriesSelector = {
 	content: {
 		default: "table-categories-content",
 	},
+	contentItem: {
+		default: "table-categories-content-row",
+	},
 	queryError: {
 		default: "query-error",
 	},

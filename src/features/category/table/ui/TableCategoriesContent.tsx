@@ -142,7 +142,10 @@ export function TableCategoriesContent({
 						</TableThead>
 						<TableTbody>
 							{filteredCategories.map((category) => (
-								<TableTr key={category.id}>
+								<TableTr
+									key={category.id}
+									data-testid="table-categories-content-row"
+								>
 									<TableTd>{category.name}</TableTd>
 									<TableTd visibleFrom="xs">
 										{category.description.length === 0

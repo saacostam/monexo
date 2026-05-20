@@ -1,4 +1,4 @@
-import { screen } from "@testing-library/dom";
+import { screen, within } from "@testing-library/dom";
 
 type DriverSelectors = Record<string, { default: string }>;
 
@@ -9,8 +9,16 @@ export class Driver<T extends DriverSelectors> {
 		return screen.findByTestId(this.selectors[key].default);
 	}
 
+	findWithinByTestId(element: HTMLElement, key: keyof T): Promise<HTMLElement> {
+		return within(element).findByTestId(this.selectors[key].default);
+	}
+
 	queryByTestId(key: keyof T): HTMLElement | null {
 		return screen.queryByTestId(this.selectors[key].default);
+	}
+
+	queryWithinByTestId(element: HTMLElement, key: keyof T): HTMLElement | null {
+		return within(element).queryByTestId(this.selectors[key].default);
 	}
 
 	selector(key: keyof T): string {
