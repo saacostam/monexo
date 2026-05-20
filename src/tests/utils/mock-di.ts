@@ -30,12 +30,6 @@ export function mockDi(overrides?: {
 			remove: vi.fn(),
 			update: vi.fn(),
 		},
-		todoClient: {
-			createTodo: vi.fn(),
-			deleteTodo: vi.fn(),
-			patchTodo: vi.fn(),
-			queryTodos: vi.fn(),
-		},
 		user: {
 			getUser: vi.fn(),
 		},

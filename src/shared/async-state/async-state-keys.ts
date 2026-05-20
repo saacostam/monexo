@@ -8,9 +8,6 @@ export enum QueryKeys {
 	QUERY_EXPENSES_IN_RANGE = "	Query Expenses In Range",
 	QUERY_EXPENSE_BY_ID = "Query Expense By Id",
 
-	// TODO
-	QUERY_TODOS = "Query Todos",
-
 	// USER
 	USER = "User",
 }
@@ -29,9 +26,4 @@ export enum MutationKeys {
 	CREATE_EXPENSE = "Create Expense",
 	DELETE_EXPENSE = "Delete Expense",
 	UPDATE_EXPENSE = "Update Expense",
-
-	// TODO
-	CREATE_TODO = "Create Todo",
-	DELETE_TODO = "Delete Todo",
-	PATCH_TODO = "Patch Todo",
 }
