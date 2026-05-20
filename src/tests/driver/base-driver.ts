@@ -13,6 +13,10 @@ export class Driver<T extends DriverSelectors> {
 		return within(element).findByTestId(this.selectors[key].default);
 	}
 
+	getAllWithinByTestId(element: HTMLElement, key: keyof T): HTMLElement[] {
+		return within(element).getAllByTestId(this.selectors[key].default);
+	}
+
 	queryByTestId(key: keyof T): HTMLElement | null {
 		return screen.queryByTestId(this.selectors[key].default);
 	}

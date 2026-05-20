@@ -1,3 +1,5 @@
+import { within } from "@testing-library/dom";
+import type { ICategory } from "@/features/category/core/domain";
 import { Driver } from "@/tests/driver";
 
 const tableCategoriesSelector = {
@@ -18,6 +20,19 @@ const tableCategoriesSelector = {
 class TableCategoriesDriver extends Driver<typeof tableCategoriesSelector> {
 	constructor() {
 		super(tableCategoriesSelector);
+	}
+
+	validateRow(item: HTMLElement, category: ICategory) {
+		expect(within(item).getByText(category.name)).toBeVisible();
+		expect(within(item).getByText(category.description)).toBeVisible();
+
+		if (category.ownership.type === "private") {
+			expect(within(item).getByText("Private")).toBeVisible();
+			expect(within(item).queryAllByRole("button")).toHaveLength(2);
+		} else {
+			expect(within(item).getByText("Public")).toBeVisible();
+			expect(within(item).queryAllByRole("button")).toHaveLength(0);
+		}
 	}
 }
 
