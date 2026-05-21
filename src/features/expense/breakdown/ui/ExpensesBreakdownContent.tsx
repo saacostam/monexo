@@ -3,56 +3,19 @@ import { Box, Flex, Paper, Text } from "@mantine/core";
 import { useMemo } from "react";
 import type { IExpense, IWithCategory } from "@/features/expense/core/domain";
 import { EmptyQuery } from "@/shared/components";
+import { getExpensesBreakdownPerCategory } from "./expenses-breakdown-data-transformation";
 
 export interface ExpensesBreakdownContentProps {
 	expenses: IWithCategory<IExpense>[];
 }
 
-const COLORS: PieChartCell["color"][] = [
-	"indigo.6",
-	"yellow.6",
-	"green.6",
-	"indigo.5",
-	"yellow.5",
-	"green.5",
-	"indigo.4",
-	"yellow.4",
-	"green.4",
-];
-
 export function ExpensesBreakdownContent({
 	expenses,
 }: ExpensesBreakdownContentProps) {
-	const pieChartCells: PieChartCell[] = useMemo(() => {
-		const categories = expenses.map((e) => e.category);
-
-		// Unique categories ids
-		const categoriesIdSet = new Set<string | null>();
-		for (const category of categories) {
-			categoriesIdSet.add(category ? category.id : null);
-		}
-		const categoriesId = Array.from(categoriesIdSet);
-
-		return categoriesId.reduce((cells: PieChartCell[], categoryId, index) => {
-			const category = categories.find((c) => c?.id === categoryId);
-
-			const amount = expenses.reduce((amount, expense) => {
-				return (
-					amount + (expense.categoryId === categoryId ? expense.amount : 0)
-				);
-			}, 0);
-
-			if (amount === 0) return cells;
-
-			cells.push({
-				name: category ? category.name : "Other",
-				value: amount,
-				color: COLORS[index % COLORS.length],
-			});
-
-			return cells;
-		}, []);
-	}, [expenses]);
+	const pieChartCells: PieChartCell[] = useMemo(
+		() => getExpensesBreakdownPerCategory({ expenses }),
+		[expenses],
+	);
 
 	if (pieChartCells.length === 0)
 		return (
