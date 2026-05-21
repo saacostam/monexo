@@ -1,7 +1,10 @@
 import { useCallback } from "react";
 import { useSearchParams } from "react-router";
-import { Dashboard } from "@/features/dashboard/ui";
+import { DashboardCoordinator } from "@/features/dashboard/ui";
 import { useDateRangeSearchParams } from "@/features/date/app";
+import { ExpensesBreakdown } from "@/features/expense/breakdown/ui";
+import { ExpensesStats } from "@/features/expense/stats/ui";
+import { ExpensesTable } from "@/features/expense/table/ui";
 
 const SEARCH_KEY = "search";
 
@@ -22,11 +25,14 @@ export default function HomeScreen() {
 	);
 
 	return (
-		<Dashboard
+		<DashboardCoordinator
 			dateRange={dateRange}
 			search={search}
 			setDateRange={setDateRange}
 			setSearch={setSearch}
+			ExpensesBreakdown={ExpensesBreakdown}
+			ExpensesTable={ExpensesTable}
+			ExpensesStats={ExpensesStats}
 		/>
 	);
 }

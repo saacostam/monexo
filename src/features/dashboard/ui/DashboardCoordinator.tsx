@@ -14,9 +14,6 @@ import type { DatesRangeValue } from "@mantine/dates";
 import { useCallback } from "react";
 import { Link } from "react-router";
 import { DateRangeInput } from "@/features/date/ui";
-import { ExpensesBreakdown } from "@/features/expense/breakdown/ui";
-import { ExpensesStats } from "@/features/expense/stats/ui";
-import { ExpensesTable } from "@/features/expense/table/ui";
 import {
 	ArrowRightIcon,
 	ChartBarIcon,
@@ -27,19 +24,41 @@ import { useGlobalModals } from "@/shared/modals/app";
 import { IModalType } from "@/shared/modals/domain";
 import { genRoute, RouteName } from "@/shared/router/app";
 
-export interface DashboardProps {
+export type DashboardCoordinatorSlot = React.ComponentType<{
+	dateRange: DatesRangeValue<string>;
+	search: string;
+	setSearch: (search: string) => void;
+}>;
+
+export interface DashboardCoordinatorProps {
 	dateRange: DatesRangeValue<string>;
 	setDateRange: (next: DatesRangeValue<string>) => void;
 	search: string;
 	setSearch: (search: string) => void;
+
+	// Slots
+	ExpensesBreakdown: DashboardCoordinatorSlot;
+	ExpensesTable: DashboardCoordinatorSlot;
+	ExpensesStats: DashboardCoordinatorSlot;
 }
 
-export function Dashboard({
+/**
+ * Stateful container and layout orchestrator for the dashboard page.
+ *
+ * Owns and distributes shared UI state to child components passed as `slots`
+ *
+ * `slots` allows dependency inversion
+ */
+export function DashboardCoordinator({
 	dateRange,
 	setDateRange,
 	search,
 	setSearch,
-}: DashboardProps) {
+
+	ExpensesBreakdown,
+	ExpensesTable,
+	ExpensesStats,
+}: DashboardCoordinatorProps) {
 	const { set } = useGlobalModals();
 
 	const onClickAddExpense = useCallback(() => {
@@ -72,7 +91,11 @@ export function Dashboard({
 				</Button>
 			</Flex>
 			<DateRangeInput dateRange={dateRange} setDateRange={setDateRange} />
-			<ExpensesStats dateRange={dateRange} />
+			<ExpensesStats
+				dateRange={dateRange}
+				search={search}
+				setSearch={setSearch}
+			/>
 			<Grid>
 				<GridCol span={{ base: 12, md: 8 }}>
 					<ExpensesTable
@@ -102,7 +125,11 @@ export function Dashboard({
 								<Title size="h4">Spending Breakdown</Title>
 							</Flex>
 							<Divider my="sm" />
-							<ExpensesBreakdown dateRange={dateRange} />
+							<ExpensesBreakdown
+								dateRange={dateRange}
+								search={search}
+								setSearch={setSearch}
+							/>
 							<Divider my="md" />
 							<Button
 								component={Link}
