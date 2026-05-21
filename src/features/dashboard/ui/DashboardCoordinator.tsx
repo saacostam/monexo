@@ -38,8 +38,8 @@ export interface DashboardCoordinatorProps {
 
 	// Slots
 	ExpensesBreakdown: DashboardCoordinatorSlot;
-	ExpensesTable: DashboardCoordinatorSlot;
 	ExpensesStats: DashboardCoordinatorSlot;
+	ExpensesTable: DashboardCoordinatorSlot;
 }
 
 /**
@@ -56,8 +56,8 @@ export function DashboardCoordinator({
 	setSearch,
 
 	ExpensesBreakdown,
-	ExpensesTable,
 	ExpensesStats,
+	ExpensesTable,
 }: DashboardCoordinatorProps) {
 	const { set } = useGlobalModals();
 
