@@ -1,17 +1,30 @@
 import { Card, Divider, Flex, Grid, ThemeIcon, Title } from "@mantine/core";
 import type { DatesRangeValue } from "@mantine/dates";
-import { CategoriesStats } from "@/features/category/stats/ui";
 import { DateRangeInput } from "@/features/date/ui";
-import { ExpensesBreakdown } from "@/features/expense/breakdown/ui";
-import { BurnRate } from "@/features/expense/burn-rate/ui";
 import { ChartBarIcon } from "@/shared/icons";
 
-export interface AnalysisProps {
+export type AnalysisCoordinatorSlot = React.ComponentType<{
+	dateRange: DatesRangeValue<string>;
+}>;
+
+export interface AnalysisCoordinatorProps {
 	dateRange: DatesRangeValue<string>;
 	setDateRange: (next: DatesRangeValue<string>) => void;
+
+	// Slots
+	BurnRate: AnalysisCoordinatorSlot;
+	CategoriesStats: AnalysisCoordinatorSlot;
+	ExpensesBreakdown: AnalysisCoordinatorSlot;
 }
 
-export function Analysis({ dateRange, setDateRange }: AnalysisProps) {
+export function AnalysisCoordinator({
+	dateRange,
+	setDateRange,
+
+	BurnRate,
+	CategoriesStats,
+	ExpensesBreakdown,
+}: AnalysisCoordinatorProps) {
 	return (
 		<>
 			<DateRangeInput dateRange={dateRange} setDateRange={setDateRange} />

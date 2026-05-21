@@ -1,7 +1,10 @@
 import { Anchor, Box, Breadcrumbs, Flex, Text, Title } from "@mantine/core";
 import { Link } from "react-router";
+import { CategoriesStats } from "@/features/category/stats/ui";
 import { useDateRangeSearchParams } from "@/features/date/app";
-import { Analysis } from "@/features/expense/analysis/ui";
+import { AnalysisCoordinator } from "@/features/expense/analysis/ui";
+import { ExpensesBreakdown } from "@/features/expense/breakdown/ui";
+import { BurnRate } from "@/features/expense/burn-rate/ui";
 import { genRoute, RouteName } from "@/shared/router/app";
 
 export default function AnalyticsScreen() {
@@ -24,7 +27,13 @@ export default function AnalyticsScreen() {
 					Select a date range to explore.
 				</Text>
 			</Box>
-			<Analysis dateRange={dateRange} setDateRange={setDateRange} />
+			<AnalysisCoordinator
+				dateRange={dateRange}
+				setDateRange={setDateRange}
+				BurnRate={BurnRate}
+				CategoriesStats={CategoriesStats}
+				ExpensesBreakdown={ExpensesBreakdown}
+			/>
 		</Flex>
 	);
 }
