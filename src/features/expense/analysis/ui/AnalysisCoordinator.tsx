@@ -17,6 +17,13 @@ export interface AnalysisCoordinatorProps {
 	ExpensesBreakdown: AnalysisCoordinatorSlot;
 }
 
+/**
+ * Stateful container and layout orchestrator for the analysis page.
+ *
+ * Owns and distributes shared UI state to child components passed as `slots`
+ *
+ * `slots` allows dependency inversion
+ */
 export function AnalysisCoordinator({
 	dateRange,
 	setDateRange,
