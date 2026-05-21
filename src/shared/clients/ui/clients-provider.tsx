@@ -8,7 +8,7 @@ import { ClientsContext } from "../app";
 import type { IClients } from "../domain";
 
 /**
- * Provider component to supply application clietns to the component tree.
+ * Provider component to supply application clients to the component tree.
  *
  * This component wraps its children with the necessary context provider (`ClientsContext.Provider`)
  * to make clients available throughout the app.
