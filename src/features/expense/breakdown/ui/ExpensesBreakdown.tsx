@@ -42,5 +42,5 @@ export function ExpensesBreakdown({ dateRange }: ExpensesBreakdownProps) {
 			/>
 		);
 
-	return <Skeleton h="256px" />;
+	return <Skeleton data-testid="expenses-breakdown-skeleton" h="256px" />;
 }
