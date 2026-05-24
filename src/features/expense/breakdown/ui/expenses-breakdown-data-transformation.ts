@@ -1,4 +1,5 @@
 import type { PieChartCell } from "@mantine/charts";
+import type { MantineColor } from "@mantine/core";
 import type { IExpense, IWithCategory } from "@/features/expense/core/domain";
 
 export function getExpensesBreakdownPerCategory(args: {
@@ -34,7 +35,7 @@ export function getExpensesBreakdownPerCategory(args: {
 	}, []);
 }
 
-const COLORS: PieChartCell["color"][] = [
+const COLORS: MantineColor[] = [
 	"indigo.6",
 	"yellow.6",
 	"green.6",

@@ -1,7 +1,7 @@
-import type { PieChartCell } from "@mantine/charts";
 import {
 	Badge,
 	Box,
+	type MantineColor,
 	Paper,
 	Table,
 	TableTbody,
@@ -21,7 +21,7 @@ export interface CategoriesStatsContentProps {
 	expenses: IWithCategory<IExpense>[];
 }
 
-const COLORS: PieChartCell["color"][] = [
+const COLORS: MantineColor[] = [
 	"indigo.6",
 	"yellow.6",
 	"green.6",
