@@ -4,6 +4,9 @@ const expensesBreakdownSelector = {
 	content: {
 		default: "expenses-breakdown-content",
 	},
+	emptyQuery: {
+		default: "empty-query",
+	},
 	queryError: {
 		default: "query-error",
 	},
