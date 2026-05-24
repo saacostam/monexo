@@ -8,28 +8,36 @@ import { expenseMockFactory } from "@/features/expense/core/test";
 import { DomainError, DomainErrorType } from "@/shared/errors/domain";
 import { mockDi, renderWithProviders } from "@/tests";
 
+const mockDateRange: DatesRangeValue<string> = ["2026-05-01", "2026-05-31"];
+
+function setupDi() {
+	const di = mockDi();
+
+	di.adapters.date.fromYyyyMmDdToUtcMsSinceEpoch.mockReturnValue({
+		ok: true,
+		value: 200,
+	});
+	di.adapters.date.plus.mockReturnValue({
+		ok: true,
+		value: 500,
+	});
+
+	return di;
+}
+
+async function renderAndWaitForSkeleton(di: ReturnType<typeof mockDi>) {
+	renderWithProviders(<ExpensesBreakdown dateRange={mockDateRange} />, di);
+	return expensesBreakdownDriver.findByTestId("skeleton");
+}
+
 describe("ExpensesBreakdown", () => {
 	it("should handle loading state", async () => {
-		const di = mockDi();
-
-		di.adapters.date.fromYyyyMmDdToUtcMsSinceEpoch.mockReturnValue({
-			ok: true,
-			value: 200,
-		});
-		di.adapters.date.plus.mockReturnValue({
-			ok: true,
-			value: 500,
-		});
-
+		const di = setupDi();
 		di.clients.expense.getAllInRange.mockImplementation(
 			() => new Promise(() => {}),
 		);
 
-		const mockDateRange: DatesRangeValue<string> = ["2026-05-01", "2026-05-31"];
-
-		renderWithProviders(<ExpensesBreakdown dateRange={mockDateRange} />, di);
-
-		const skeleton = await expensesBreakdownDriver.findByTestId("skeleton");
+		const skeleton = await renderAndWaitForSkeleton(di);
 		expect(skeleton).toBeVisible();
 
 		expect(
@@ -41,17 +49,7 @@ describe("ExpensesBreakdown", () => {
 	});
 
 	it("should handle query error state", async () => {
-		const di = mockDi();
-
-		di.adapters.date.fromYyyyMmDdToUtcMsSinceEpoch.mockReturnValue({
-			ok: true,
-			value: 200,
-		});
-		di.adapters.date.plus.mockReturnValue({
-			ok: true,
-			value: 500,
-		});
-
+		const di = setupDi();
 		di.clients.expense.getAllInRange.mockRejectedValue(
 			new DomainError({
 				msg: "message",
@@ -60,11 +58,7 @@ describe("ExpensesBreakdown", () => {
 			}),
 		);
 
-		const mockDateRange: DatesRangeValue<string> = ["2026-05-01", "2026-05-31"];
-
-		renderWithProviders(<ExpensesBreakdown dateRange={mockDateRange} />, di);
-
-		const skeleton = await expensesBreakdownDriver.findByTestId("skeleton");
+		const skeleton = await renderAndWaitForSkeleton(di);
 		expect(skeleton).toBeVisible();
 
 		await waitForElementToBeRemoved(skeleton);
@@ -81,16 +75,7 @@ describe("ExpensesBreakdown", () => {
 	});
 
 	it("should handle render content", async () => {
-		const di = mockDi();
-
-		di.adapters.date.fromYyyyMmDdToUtcMsSinceEpoch.mockReturnValue({
-			ok: true,
-			value: 200,
-		});
-		di.adapters.date.plus.mockReturnValue({
-			ok: true,
-			value: 500,
-		});
+		const di = setupDi();
 
 		const food = categoryMockFactory.createCategory({ name: "Food" });
 		const transport = categoryMockFactory.createCategory({ name: "Transport" });
@@ -131,13 +116,7 @@ describe("ExpensesBreakdown", () => {
 
 		di.clients.expense.getAllInRange.mockResolvedValue(response);
 
-		const mockDateRange: DatesRangeValue<string> = ["2026-05-01", "2026-05-31"];
-
-		renderWithProviders(<ExpensesBreakdown dateRange={mockDateRange} />, di);
-
-		const skeleton = await expensesBreakdownDriver.findByTestId("skeleton");
-		expect(skeleton).toBeVisible();
-
+		const skeleton = await renderAndWaitForSkeleton(di);
 		await waitForElementToBeRemoved(skeleton);
 
 		const content = await expensesBreakdownDriver.findByTestId("content");
@@ -164,27 +143,11 @@ describe("ExpensesBreakdown", () => {
 	});
 
 	it("should render empty state when no expenses returned", async () => {
-		const di = mockDi();
+		const di = setupDi();
+		di.clients.expense.getAllInRange.mockResolvedValue([]);
 
-		di.adapters.date.fromYyyyMmDdToUtcMsSinceEpoch.mockReturnValue({
-			ok: true,
-			value: 200,
-		});
-		di.adapters.date.plus.mockReturnValue({
-			ok: true,
-			value: 500,
-		});
-
-		const response: IExpenseClientPayload["GetAllInRangeResponse"] = [];
-		di.clients.expense.getAllInRange.mockResolvedValue(response);
-
-		const mockDateRange: DatesRangeValue<string> = ["2026-05-01", "2026-05-31"];
-
-		renderWithProviders(<ExpensesBreakdown dateRange={mockDateRange} />, di);
-
-		await waitForElementToBeRemoved(
-			await expensesBreakdownDriver.findByTestId("skeleton"),
-		);
+		const skeleton = await renderAndWaitForSkeleton(di);
+		await waitForElementToBeRemoved(skeleton);
 
 		expect(
 			expensesBreakdownDriver.queryByTestId("content"),
