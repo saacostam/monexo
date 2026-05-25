@@ -38,5 +38,5 @@ export function BurnRate({ dateRange }: BurnRateProps) {
 	if (queryAllExpensesInCalendarRange.isSuccess)
 		return <BurnRateContent expenses={queryAllExpensesInCalendarRange.data} />;
 
-	return <Skeleton h="256px" />;
+	return <Skeleton data-testid="burn-rate-skeleton" h="256px" />;
 }

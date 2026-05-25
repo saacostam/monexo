@@ -1,5 +1,5 @@
 import { AreaChart } from "@mantine/charts";
-import { Flex, Paper } from "@mantine/core";
+import { Box, Flex, Paper } from "@mantine/core";
 import { useMemo } from "react";
 import type { IExpense, IWithCategory } from "@/features/expense/core/domain";
 import { useAdapters } from "@/shared/adapters/core/app";
@@ -57,30 +57,31 @@ export function BurnRateContent({ expenses }: BurnRateContentProps) {
 		return result;
 	}, [expenses, date]);
 
-	if (accumulatedExpenses.length === 0)
-		return (
-			<Paper bg="transparent" p="md" withBorder>
-				<EmptyQuery
-					title="No data found"
-					description="Try selecting a different date range or adding a new expense"
-				/>
-			</Paper>
-		);
-
 	return (
-		<Flex justify="center">
-			<AreaChart
-				data={accumulatedExpenses}
-				dataKey="label"
-				flex="1"
-				h={300}
-				series={[
-					{
-						name: "Cumulative",
-						color: "indigo.6",
-					},
-				]}
-			/>
-		</Flex>
+		<Box data-testid="burn-rate-content">
+			{accumulatedExpenses.length === 0 ? (
+				<Paper bg="transparent" p="md" withBorder>
+					<EmptyQuery
+						title="No data found"
+						description="Try selecting a different date range or adding a new expense"
+					/>
+				</Paper>
+			) : (
+				<Flex justify="center">
+					<AreaChart
+						data={accumulatedExpenses}
+						dataKey="label"
+						flex="1"
+						h={300}
+						series={[
+							{
+								name: "Cumulative",
+								color: "indigo.6",
+							},
+						]}
+					/>
+				</Flex>
+			)}
+		</Box>
 	);
 }
