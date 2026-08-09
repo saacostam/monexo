@@ -78,7 +78,7 @@ export function About() {
 				</Title>
 				<AspectRatio ratio={16 / 9}>
 					<iframe
-						src={`https://www.youtube.com/embed/ATVngmf_X2A`}
+						src={`https://www.youtube.com/embed/Td-LGVh_4KY`}
 						title="YouTube video player"
 						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 						allowFullScreen
